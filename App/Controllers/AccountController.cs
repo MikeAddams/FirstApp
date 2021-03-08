@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using App.Models.View;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,13 +33,13 @@ namespace App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password, string returnUrl)
+        public async Task<IActionResult> Login(LoginModel model)
         {
-            if ((username == "Admin") && (password == "Admin"))
+            if ((model.Username == "Admin") && (model.Password == "Admin"))
             {
                 var claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.Name, username)
+                    new Claim(ClaimTypes.Name, model.Username)
                 };
                 var claimsIdentity = new ClaimsIdentity(claims, "Login");
 
