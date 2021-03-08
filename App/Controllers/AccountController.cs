@@ -1,4 +1,5 @@
-﻿using App.Models.View;
+﻿using App.Models.Context;
+using App.Models.View;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -13,6 +14,13 @@ namespace App.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly AppDbContext Data;
+
+        public AccountController(AppDbContext context)
+        {
+            Data = context;
+        }
+
         public IActionResult Login()
         {
             return View();
