@@ -37,17 +37,24 @@ namespace App.Controllers
         {
             if ((model.Username == "Admin") && (model.Password == "Admin"))
             {
-                var claims = new List<Claim>()
-                {
-                    new Claim(ClaimTypes.Name, model.Username)
-                };
-                var claimsIdentity = new ClaimsIdentity(claims, "Login");
+                await Authenticate(model.Username);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                 return Redirect("/Account/Profile");
             }
 
             return View();
+        }
+
+        private async Task Authenticate(string username)
+        {
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, username)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
         }
     }
 }
