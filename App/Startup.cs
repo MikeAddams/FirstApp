@@ -34,7 +34,7 @@ namespace App
                 {
                     options.Cookie.Name = "UserSessionCookie";
                     options.LoginPath = "/Account/Login";
-                    options.LogoutPath = "/Account/Profile";
+                    //options.LogoutPath = "/Account/Profile";
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(25);
                     options.SlidingExpiration = true;
                 });

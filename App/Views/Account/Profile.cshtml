@@ -1,10 +1,16 @@
-﻿@{
+﻿@model App.Models.User
+
+@{
     ViewData["Title"] = "My Profile";
 }
 
 <h1>My Profile</h1>
 
-<div>Username: @User.Identity.Name</div>
+<div>Username: @Model.Username</div>
+<div>Email: @Model.Email</div>
+<div>Nickname: @Model.Nickname</div>
+<div>First Name: @Model.FirstName</div>
+<div>Last Name: @Model.LastName</div>
 
 <br />
 <form method="POST" asp-controller="Account" asp-action="Logout">

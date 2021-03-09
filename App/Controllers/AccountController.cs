@@ -33,10 +33,17 @@ namespace App.Controllers
             return View();
         }
 
+        //[HttpGet("{username}")]
         [Authorize]
-        public IActionResult Profile(string username)
+        public IActionResult Profile()
         {
-            User user = Data.Users.FirstOrDefault(x => x.Username == username);
+            //User user = Data.Users.FirstOrDefault(x => x.Username == username);
+
+            //string username = User.Identity.Name;
+            //string userId = User.Claims.FirstOrDefault(x => x.Type == "Id").Value;
+            Int32.TryParse(User.Claims.FirstOrDefault(x => x.Type == "Id").Value, out int userId);
+
+            User user = Data.Users.FirstOrDefault(x => x.Id == userId);
 
             return View(user);
         }
@@ -59,7 +66,7 @@ namespace App.Controllers
 
                 if (user != null)
                 {
-                    await Authenticate(model.Username);
+                    await Authenticate(user.Id.ToString(), model.Username);
 
                     return Redirect("/Account/Profile");
                 }
@@ -90,7 +97,8 @@ namespace App.Controllers
                     });
                     await Data.SaveChangesAsync();
 
-                    await Authenticate(model.Username);
+                    string lastId = Data.Users.MaxAsync(x => x.Id).ToString();
+                    await Authenticate(lastId, model.Username);
 
                     return Redirect("/Account/Profile");
                 }
@@ -101,10 +109,11 @@ namespace App.Controllers
             return View(model); //??
         }
 
-        private async Task Authenticate(string username)
+        private async Task Authenticate(string Id, string username)
         {
             var claims = new List<Claim>()
             {
+                new Claim("Id", Id),
                 new Claim(ClaimTypes.Name, username)
             };
 
