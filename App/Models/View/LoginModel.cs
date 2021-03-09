@@ -8,10 +8,10 @@ namespace App.Models.View
 {
     public class LoginModel
     {
-        [Required(ErrorMessage = "There's no username")]
+        [Required(ErrorMessage ="There's no username")]
         public string Username { get; set; }
 
-        [Required(ErrorMessage = "There's no password")]
+        [Required(ErrorMessage ="There's no password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

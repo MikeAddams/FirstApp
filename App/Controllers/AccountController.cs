@@ -1,9 +1,11 @@
-﻿using App.Models.Context;
+﻿using App.Models;
+using App.Models.Context;
 using App.Models.View;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,8 +28,13 @@ namespace App.Controllers
             return View();
         }
 
+        public IActionResult Register()
+        {
+            return View();
+        }
+
         [Authorize]
-        public IActionResult Profile()
+        public IActionResult Profile(RegisterModel model)
         {
             return View();
         }
@@ -35,22 +42,61 @@ namespace App.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            if ((model.Username == "Admin") && (model.Password == "Admin"))
+            if (ModelState.IsValid)
             {
-                await Authenticate(model.Username);
+                User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == model.Username && x.Password == model.Password);
 
-                return Redirect("/Account/Profile");
+                if (user != null)
+                {
+                    await Authenticate(model.Username);
+
+                    return Redirect("/Account/Profile");
+                }
+                ModelState.AddModelError("", "Incorrect username or password");
             }
 
-            return View();
+            return View(model); //??
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == model.Username);
+
+                if (user == null)
+                {
+                    Data.Users.Add(new User
+                    {
+                        Username = model.Username,
+                        Email = model.Email,
+                        Nickname = model.Nickname,
+                        Password = model.Password,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName
+                    });
+                    await Data.SaveChangesAsync();
+
+                    await Authenticate(model.Username);
+
+                    return Redirect("/Account/Profile");
+                }
+                else
+                    ModelState.AddModelError("", "Username is already in use");
+            }
+
+            return View(model); //??
         }
 
         private async Task Authenticate(string username)
