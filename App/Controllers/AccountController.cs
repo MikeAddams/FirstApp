@@ -34,9 +34,11 @@ namespace App.Controllers
         }
 
         [Authorize]
-        public IActionResult Profile(RegisterModel model)
+        public IActionResult Profile(string username)
         {
-            return View();
+            User user = Data.Users.FirstOrDefault(x => x.Username == username);
+
+            return View(user);
         }
 
         [HttpPost]
