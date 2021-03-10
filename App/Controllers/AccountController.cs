@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace App.Controllers
@@ -35,15 +37,14 @@ namespace App.Controllers
 
         //[HttpGet("{username}")]
         [Authorize]
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile(int id)
         {
-            //User user = Data.Users.FirstOrDefault(x => x.Username == username);
+            string username = User.Identity.Name;
 
-            //string username = User.Identity.Name;
-            //string userId = User.Claims.FirstOrDefault(x => x.Type == "Id").Value;
-            Int32.TryParse(User.Claims.FirstOrDefault(x => x.Type == "Id").Value, out int userId);
+            User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == username);
 
-            User user = Data.Users.FirstOrDefault(x => x.Id == userId);
+            //Int32.TryParse(User.Claims.FirstOrDefault(x => x.Type == "Id").Value, out int userId);
+            //User user = Data.Users.FirstOrDefault(x => x.Id == userId);
 
             return View(user);
         }
@@ -62,7 +63,8 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == model.Username && x.Password == model.Password);
+                string hashedPass = HashPassword(model.Password);
+                User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == model.Username && x.Password == hashedPass);
 
                 if (user != null)
                 {
@@ -91,7 +93,7 @@ namespace App.Controllers
                         Username = model.Username,
                         Email = model.Email,
                         Nickname = model.Nickname,
-                        Password = model.Password,
+                        Password = HashPassword(model.Password),
                         FirstName = model.FirstName,
                         LastName = model.LastName
                     });
@@ -120,6 +122,19 @@ namespace App.Controllers
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+        }
+
+        private static string HashPassword(string password, string algorithm = "sha256")
+        {
+            return Hash(Encoding.UTF8.GetBytes(password), algorithm);
+        }
+
+        private static string Hash(byte[] input, string algorithm = "sha256")
+        {
+            using (var hashAlgorithm = HashAlgorithm.Create(algorithm))
+            {
+                return Convert.ToBase64String(hashAlgorithm.ComputeHash(input));
+            }
         }
     }
 }

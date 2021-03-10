@@ -35,6 +35,16 @@
             <span asp-validation-for="Nickname"></span>
         </div>
         <div class="form-group">
+            <label asp-for="FirstName">First Name</label>
+            <input type="text" asp-for="FirstName" />
+            <span asp-validation-for="FirstName"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName">Last Name</label>
+            <input type="text" asp-for="LastName" />
+            <span asp-validation-for="LastName"></span>
+        </div>
+        <div class="form-group">
             <input type="submit" value="Register" class="btn btn-outline-dark" />
         </div>
     </div>
