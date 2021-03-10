@@ -4,25 +4,35 @@
     ViewData["Title"] = "Sign In";
 }
 
-<form asp-controller="Account" asp-action="Login" asp-anti-forgery="true">
-    <div class="validation" asp-validation-summary="ModelOnly"></div>
-    <div>
-        <div class="form-group">
-            <label asp-for="Username">Username</label>
-            <input type="text" asp-for="Username" />
-            <span asp-validation-for="Username"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Password">Password</label>
-            <input type="password" asp-for="Password" />
-            <span asp-validation-for="Password"></span>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Sign in" class="btn btn-outline-dark" />
-        </div>
-    </div>
-</form>
+<div class="text-center mt-5">
+    <form asp-controller="Account" asp-action="Login" asp-antiforgery="true"
+          style="max-width: 310px; margin: auto;">
 
-<hr />
-<a asp-action="Register" asp-controller="Account">Registration</a>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+
+        <h1 class="h2 mb-4 font-weight-normal">Please Sign In</h1>
+
+        <label asp-for="Username"
+               class="sr-only">Username</label>
+        <input asp-for="Username" type="text"
+               class="form-control" placeholder="Username" required autofocus />
+        <span asp-validation-for="Username"></span>
+
+        <label asp-for="Password"
+               class="sr-only">Password</label>
+        <input asp-for="Password" type="password"
+               class="form-control mt-3" placeholder="Password" required />
+        <span asp-validation-for="Password"></span>
+
+        <div class="mt-3">
+            <button class="btn btn-lg btn-primary btn-block">Sign In</button>
+        </div>
+
+        <hr />
+        <a asp-action="Register" asp-controller="Account"
+            class="btn btn-lg btn-secondary btn-block">Register</a>
+    </form>
+</div>
+
+
 

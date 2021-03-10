@@ -4,15 +4,81 @@
     ViewData["Title"] = "My Profile";
 }
 
-<h1>My Profile</h1>
+<div class="container">
+    <div class="row gutters">
+        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="account-settings">
+                        <div class="user-profile">
+                            <div class="user-avatar">
+                                <img style="width: 210px;" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="user_pic">
+                            </div>
+                            <h5 class="user-name">@Model.Nickname</h5>
+                            <h6 class="user-email">@Model.Email</h6>
+                        </div>
+                        <!--
+                        <div class="about">
+                            <h5>About</h5>
+                            <p>I'm Yuki. Full Stack Designer I enjoy creating user-centric, delightful and human experiences.</p>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="row gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <h6 class="mb-2 text-primary">Personal Details</h6>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <label class="form-control">@Model.FirstName</label>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <label class="form-control">@Model.LastName</label>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <label class="form-control">@Model.Email</label>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Nickname</label>
+                                <label class="form-control">@Model.Nickname</label>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <label class="form-control">@Model.Username</label>
+                            </div>
+                        </div>
+                    </div>
 
-<div>Username: @Model.Username</div>
-<div>Email: @Model.Email</div>
-<div>Nickname: @Model.Nickname</div>
-<div>First Name: @Model.FirstName</div>
-<div>Last Name: @Model.LastName</div>
+                    <div class="row gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="text-right">
+                                <button class="btn btn-primary">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<br />
-<form method="POST" asp-controller="Account" asp-action="Logout">
-    <button class="btn btn-lg btn-primary btn-block">Logout</button>
-</form>
+    <form method="POST" asp-controller="Account" asp-action="Logout">
+        <button class="btn btn-lg btn-primary btn-block">Logout</button>
+    </form>
+</div>

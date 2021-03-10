@@ -4,48 +4,61 @@
     ViewData["Title"] = "Registration";
 }
 
-<h1>Registration</h1><br />
+<div class="text-center mt-5">
+    <form asp-controller="Account" asp-action="Register" asp-antiforgery="true"
+          style="max-width: 310px; margin: auto;">
 
-<form asp-controller="Account" asp-action="Register" asp-anti-forgery="true">
-    <div class="validation" asp-validation-summary="ModelOnly"></div>
-    <div>
-        <div class="form-group">
-            <label asp-for="Username">Username</label>
-            <input type="text" asp-for="Username" />
-            <span asp-validation-for="Username"></span>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+
+        <h1 class="h2 mb-4 font-weight-normal">Registration</h1>
+
+        <label asp-for="Username"
+               class="sr-only">Username</label>
+        <input asp-for="Username" type="text"
+               class="form-control" placeholder="Username" required autofocus />
+        <span asp-validation-for="Username"></span>
+
+        <label asp-for="Email"
+               class="sr-only">Email</label>
+        <input asp-for="Email" type="text"
+               class="form-control mt-3" placeholder="Email" required />
+        <span asp-validation-for="Email"></span>
+
+        <label asp-for="Password"
+               class="sr-only">Password</label>
+        <input asp-for="Password" type="password"
+               class="form-control mt-3" placeholder="Password" required />
+        <span asp-validation-for="Password"></span>
+
+        <label asp-for="ConfirmPassword"
+               class="sr-only">Confirm Password</label>
+        <input asp-for="ConfirmPassword" type="password"
+               class="form-control mt-3" placeholder="Confirm Password" required />
+        <span asp-validation-for="ConfirmPassword"></span>
+
+        <label asp-for="Nickname"
+               class="sr-only">Nickname</label>
+        <input asp-for="Nickname" type="text"
+               class="form-control mt-3" placeholder="Nickname" required />
+        <span asp-validation-for="Nickname"></span>
+
+        <label asp-for="FirstName"
+               class="sr-only">FirstName</label>
+        <input asp-for="FirstName" type="text"
+               class="form-control mt-3" placeholder="FirstName" required />
+        <span asp-validation-for="FirstName"></span>
+
+        <label asp-for="LastName"
+               class="sr-only">LastName</label>
+        <input asp-for="LastName" type="text"
+               class="form-control mt-3" placeholder="LastName" required />
+        <span asp-validation-for="LastName"></span>
+
+        <div class="mt-3">
+            <button class="btn btn-lg btn-primary btn-block">Register</button>
         </div>
-        <div class="form-group">
-            <label asp-for="Email">Email</label>
-            <input type="text" asp-for="Email" />
-            <span asp-validation-for="Email"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Password">Password</label>
-            <input type="password" asp-for="Password" />
-            <span asp-validation-for="Password"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="ConfirmPassword">Confirm Password</label>
-            <input type="password" asp-for="ConfirmPassword" />
-            <span asp-validation-for="ConfirmPassword"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Nickname">Nickname</label>
-            <input type="text" asp-for="Nickname" />
-            <span asp-validation-for="Nickname"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="FirstName">First Name</label>
-            <input type="text" asp-for="FirstName" />
-            <span asp-validation-for="FirstName"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="LastName">Last Name</label>
-            <input type="text" asp-for="LastName" />
-            <span asp-validation-for="LastName"></span>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Register" class="btn btn-outline-dark" />
-        </div>
-    </div>
-</form>
+        <hr />
+        <a asp-action="Login" asp-controller="Account"
+           class="btn btn-lg btn-secondary btn-block">Login</a>
+    </form>
+</div>
