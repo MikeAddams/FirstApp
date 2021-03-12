@@ -15,5 +15,14 @@ namespace App.Models
         public string Nickname { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        public RoleType Role { get; set; }
+    }
+
+    public enum RoleType
+    {
+        Client,
+        Manager,
+        Administrator
     }
 }

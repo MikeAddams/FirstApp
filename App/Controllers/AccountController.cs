@@ -18,11 +18,11 @@ namespace App.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly AppDbContext Data;
+        private readonly AppDbContext _userData;
 
-        public AccountController(AppDbContext context)
+        public AccountController(AppDbContext userData)
         {
-            Data = context;
+            _userData = userData;
         }
 
         public IActionResult Login()
@@ -41,7 +41,7 @@ namespace App.Controllers
         {
             string username = User.Identity.Name;
 
-            User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == username);
+            User user = await _userData.Users.FirstOrDefaultAsync(x => x.Username == username);
 
             //Int32.TryParse(User.Claims.FirstOrDefault(x => x.Type == "Id").Value, out int userId);
             //User user = Data.Users.FirstOrDefault(x => x.Id == userId);
@@ -64,18 +64,18 @@ namespace App.Controllers
             if (ModelState.IsValid)
             {
                 string hashedPass = HashPassword(model.Password);
-                User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == model.Username && x.Password == hashedPass);
+                User user = await _userData.Users.FirstOrDefaultAsync(x => x.Username == model.Username && x.Password == hashedPass);
 
                 if (user != null)
                 {
-                    await Authenticate(user.Id.ToString(), model.Username);
+                    await Authenticate(user.Id.ToString(), user.Username, user.Role);
 
                     return Redirect("/Account/Profile");
                 }
                 ModelState.AddModelError("", "Incorrect username or password");
             }
 
-            return View(model); //??
+            return View(model);
         }
 
         [HttpPost]
@@ -84,23 +84,24 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == model.Username);
+                User user = await _userData.Users.FirstOrDefaultAsync(x => x.Username == model.Username);
 
                 if (user == null)
                 {
-                    Data.Users.Add(new User
+                    _userData.Users.Add(new User
                     {
                         Username = model.Username,
                         Email = model.Email,
                         Nickname = model.Nickname,
                         Password = HashPassword(model.Password),
                         FirstName = model.FirstName,
-                        LastName = model.LastName
+                        LastName = model.LastName,
+                        Role = RoleType.Client
                     });
-                    await Data.SaveChangesAsync();
+                    await _userData.SaveChangesAsync();
 
-                    string lastId = Data.Users.MaxAsync(x => x.Id).ToString();
-                    await Authenticate(lastId, model.Username);
+                    string lastId = _userData.Users.MaxAsync(x => x.Id).ToString();
+                    await Authenticate(lastId, model.Username, RoleType.Client);
 
                     return Redirect("/Account/Profile");
                 }
@@ -108,15 +109,16 @@ namespace App.Controllers
                     ModelState.AddModelError("", "Username is already in use");
             }
 
-            return View(model); //??
+            return View(model);
         }
 
-        private async Task Authenticate(string Id, string username)
+        private async Task Authenticate(string Id, string username, RoleType role)
         {
             var claims = new List<Claim>()
             {
                 new Claim("Id", Id),
-                new Claim(ClaimTypes.Name, username)
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, role.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
