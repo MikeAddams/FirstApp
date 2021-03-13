@@ -1,14 +1,12 @@
 ﻿using App.Models;
-using App.Models.Context;
 using App.Models.View;
+using App.UserData;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,11 +16,11 @@ namespace App.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly AppDbContext _userData;
+        private readonly IUserData UserData;
 
-        public AccountController(AppDbContext userData)
+        public AccountController(IUserData userData)
         {
-            _userData = userData;
+            UserData = userData;
         }
 
         public IActionResult Login()
@@ -35,16 +33,10 @@ namespace App.Controllers
             return View();
         }
 
-        //[HttpGet("{username}")]
         [Authorize]
-        public async Task<IActionResult> Profile(int id)
+        public async Task<IActionResult> Profile()
         {
-            string username = User.Identity.Name;
-
-            User user = await _userData.Users.FirstOrDefaultAsync(x => x.Username == username);
-
-            //Int32.TryParse(User.Claims.FirstOrDefault(x => x.Type == "Id").Value, out int userId);
-            //User user = Data.Users.FirstOrDefault(x => x.Id == userId);
+            User user = await UserData.GetByUsername(User.Identity.Name);
 
             return View(user);
         }
@@ -64,11 +56,13 @@ namespace App.Controllers
             if (ModelState.IsValid)
             {
                 string hashedPass = HashPassword(model.Password);
-                User user = await _userData.Users.FirstOrDefaultAsync(x => x.Username == model.Username && x.Password == hashedPass);
+                //User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == model.Username && x.Password == hashedPass);
 
-                if (user != null)
+                User user = await UserData.GetByUsername(model.Username);
+
+                if (user != null && user.Password == hashedPass)
                 {
-                    await Authenticate(user.Id.ToString(), user.Username, user.Role);
+                    await Authenticate(user.Username, user.Role);
 
                     return Redirect("/Account/Profile");
                 }
@@ -84,11 +78,12 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _userData.Users.FirstOrDefaultAsync(x => x.Username == model.Username);
+                //User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == model.Username);
+                User user = await UserData.GetByUsername(model.Username);
 
                 if (user == null)
                 {
-                    _userData.Users.Add(new User
+                    var newUser = new User
                     {
                         Username = model.Username,
                         Email = model.Email,
@@ -97,11 +92,12 @@ namespace App.Controllers
                         FirstName = model.FirstName,
                         LastName = model.LastName,
                         Role = RoleType.Client
-                    });
-                    await _userData.SaveChangesAsync();
+                    };
 
-                    string lastId = _userData.Users.MaxAsync(x => x.Id).ToString();
-                    await Authenticate(lastId, model.Username, RoleType.Client);
+                    await UserData.Add(newUser);
+                    await UserData.Commit();
+
+                    await Authenticate(model.Username, RoleType.Client);
 
                     return Redirect("/Account/Profile");
                 }
@@ -112,11 +108,10 @@ namespace App.Controllers
             return View(model);
         }
 
-        private async Task Authenticate(string Id, string username, RoleType role)
+        private async Task Authenticate(string username, RoleType role)
         {
             var claims = new List<Claim>()
             {
-                new Claim("Id", Id),
                 new Claim(ClaimTypes.Name, username),
                 new Claim(ClaimTypes.Role, role.ToString())
             };
@@ -131,7 +126,7 @@ namespace App.Controllers
             return Hash(Encoding.UTF8.GetBytes(password), algorithm);
         }
 
-        private static string Hash(byte[] input, string algorithm = "sha256")
+        private static string Hash(byte[] input, string algorithm)
         {
             using (var hashAlgorithm = HashAlgorithm.Create(algorithm))
             {
