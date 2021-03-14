@@ -9,6 +9,7 @@ namespace App.UserData
     {
         public Task<User> GetByUsername(string username);
         public Task<User> Add(User newUser);
+        public User Update(User updatedUser);
 
         public Task<int> Commit();
     }

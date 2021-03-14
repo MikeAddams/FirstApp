@@ -28,6 +28,14 @@ namespace App.UserData
             return newUser;
         }
 
+        public User Update(User updatedUser)
+        {
+            var entity = Db.Users.Attach(updatedUser);
+            entity.State = EntityState.Modified;
+
+            return updatedUser;
+        }
+
         public async Task<int> Commit()
         {
             return await Db.SaveChangesAsync();

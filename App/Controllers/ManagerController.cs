@@ -1,21 +1,18 @@
 ﻿using App.Models;
-using App.Models.Context;
+using App.UserData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace App.Controllers
 {
     public class ManagerController : Controller
     {
-        //private readonly AppDbContext
+        private readonly IUserData userData;
 
-        public ManagerController()
+        public ManagerController(IUserData user)
         {
-
+            userData = user;
         }
 
         [Authorize(Roles = "Manager")]
@@ -24,11 +21,16 @@ namespace App.Controllers
             return View();
         }
 
-
         public async Task<IActionResult> BecomeManager()
         {
+            User user = await userData.GetByUsername(User.Identity.Name);
 
-            return View();
+            user.Role = RoleType.Manager;
+
+            userData.Update(user);
+            await userData.Commit();
+
+            return RedirectToAction("Cabinet", "Manager");
         }
 
     }
