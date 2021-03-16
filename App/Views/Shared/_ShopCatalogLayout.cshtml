@@ -15,7 +15,8 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">App</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index"
+                   class="navbar-brand">App</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -25,22 +26,26 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">My Profile</a>
+                                <a asp-area="" asp-controller="Account" asp-action="Profile"
+                                   class="nav-link text-dark">My Profile</a>
                             </li>
                         }
                         @if (!User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Sign In</a>
+                                <a asp-area="" asp-controller="Account" asp-action="Login"
+                                   class="nav-link text-dark">Sign In</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Registration</a>
+                                <a asp-area="" asp-controller="Account" asp-action="Register"
+                                   class="nav-link text-dark">Registration</a>
                             </li>
                         }
                         @if (User.IsInRole("Manager"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Manager" asp-action="Index">Cabinet</a>
+                                <a asp-area="" asp-controller="Manager" asp-action="Index"
+                                   class="nav-link text-dark">Cabinet</a>
                             </li>
                         }
                     </ul>
@@ -48,15 +53,29 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
-        <main role="main" class="pb-3">
+
+        <div class="row">
+
+            <div class="col-lg-3">
+                <h1 class="my-4 h3">Search Bar someday</h1>
+                <div class="list-group">
+                    <a href="#" class="list-group-item">Category 1</a>
+                    <a href="#" class="list-group-item">Category 2</a>
+                    <a href="#" class="list-group-item">Category 3</a>
+                </div>
+            </div>
+
             @RenderBody()
-        </main>
+
+        </div>
     </div>
 
-    <footer class="border-bottom footer text-muted">
+
+    <footer class="text-muted mt-5 mb-5">
         <div class="container">
-            &copy; 2021 - App - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - App
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -64,6 +83,8 @@
 
     <!-- <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+
+    <script src="~/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     @RenderSection("Scripts", required: false)
 </body>
