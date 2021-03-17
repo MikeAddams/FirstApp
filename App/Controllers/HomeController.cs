@@ -1,4 +1,5 @@
 ﻿using App.Models;
+using App.ProductData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,21 +12,19 @@ namespace App.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        //private readonly ILogger<HomeController> _logger;
+        private readonly IProductData productData;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IProductData _productData)
         {
-            _logger = logger;
+            productData = _productData;
         }
 
         public IActionResult Index()
         {
-            return View();
-        }
+            List<Product> saleProducts = productData.GetLast(6);
 
-        public IActionResult Privacy()
-        {
-            return View();
+            return View(saleProducts);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

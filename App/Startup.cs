@@ -1,4 +1,5 @@
 using App.Models.Context;
+using App.ProductData;
 using App.UserData;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -9,9 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace App
 {
@@ -33,6 +31,7 @@ namespace App
             });
 
             services.AddScoped<IUserData, SqlUserData>();
+            services.AddScoped<IProductData, SqlProductData>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
