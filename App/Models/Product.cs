@@ -9,7 +9,7 @@ namespace App.Models
         public float Price { get; set; }
 
         //public int Quantity { get; set; }
-        public string Picture { get; set; }
+        public int ImageId { get; set; }
 
         public int ManagerId { get; set; } // foreign key
     }
