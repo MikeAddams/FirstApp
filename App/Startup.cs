@@ -1,3 +1,4 @@
+using App.Data.Picture;
 using App.Models.Context;
 using App.ProductData;
 using App.UserData;
@@ -32,6 +33,7 @@ namespace App
 
             services.AddScoped<IUserData, SqlUserData>();
             services.AddScoped<IProductData, SqlProductData>();
+            services.AddScoped<IImageData, SqlImageData>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

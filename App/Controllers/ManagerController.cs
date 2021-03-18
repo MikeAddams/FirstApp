@@ -30,7 +30,7 @@ namespace App.Controllers
             userData.Update(user);
             await userData.Commit();
 
-            return RedirectToAction("Cabinet", "Manager");
+            return RedirectToAction("Index", "Manager");
         }
 
     }

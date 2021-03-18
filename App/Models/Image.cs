@@ -10,6 +10,5 @@ namespace App.Models
         public int Id { get; set; }
         public string ThumbNailPath { get; set; }
         public string FullSizePath { get; set; } 
-        public bool IsMainThumbNail { get; set; }
     }
 }

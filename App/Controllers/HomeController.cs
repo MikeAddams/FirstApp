@@ -1,10 +1,12 @@
-﻿using App.Models;
+﻿using App.Data.Picture;
+using App.Models;
 using App.ProductData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,17 +16,24 @@ namespace App.Controllers
     {
         //private readonly ILogger<HomeController> _logger;
         private readonly IProductData productData;
+        private readonly IImageData imageData;
 
-        public HomeController(IProductData _productData)
+        public HomeController(IProductData _productData, IImageData _imageData)
         {
             productData = _productData;
+            imageData = _imageData;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            List<Product> saleProducts = productData.GetLast(6);
+            List<Product> products = productData.GetLast(6);
 
-            return View(saleProducts);
+            foreach(var item in products)
+            {
+                item.ThumbNail = await imageData.GetById(item.ThumbNailId);
+            }
+
+            return View(products);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

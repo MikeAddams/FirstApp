@@ -25,7 +25,7 @@ namespace App.ProductData
         public List<Product> GetLast(int count)
         {
             List<Product> ListOfProducts = DB.Products.OrderByDescending(p => p.Id).Take(count).ToList();
-            
+
             return ListOfProducts;
         }
 

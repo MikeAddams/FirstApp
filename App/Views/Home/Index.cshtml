@@ -3,8 +3,6 @@
     Layout = "~/Views/Shared/_ShopCatalogLayout.cshtml";
 }
 
-@model List<Product>
-
 <div class="col-lg-9">
 
     <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
@@ -38,11 +36,13 @@
     <span class="d-block h3 text-white bg-dark p-2 m-0">Sale</span>
     <div class="row">
 
+        <!-- <img src="~/media/product/concaver-cvr2-wheels-20x9-et45-5x112-carbon-graphite.jpg" /> -->
+
         @foreach (var item in Model)
         {
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card h-100">
-                    <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                    <a href="#"><img class="card-img-top" src="@item.ThumbNail.ThumbNailPath"  alt=""></a>
                     <div class="card-body">
                         <h4 class="card-title mb-2">
                             <a class="text-dark" href="#">@item.Name</a>
@@ -50,10 +50,10 @@
                         <h5 class="text-danger">€@item.Price.ToString("0.00")</h5>
                     </div>
                     <!--
-                    <div class="card-footer">
-                        <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-                    </div>
-                    -->
+                <div class="card-footer">
+                    <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+                </div>
+                -->
                 </div>
             </div>
         }
