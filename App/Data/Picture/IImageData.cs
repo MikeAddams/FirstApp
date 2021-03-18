@@ -8,9 +8,6 @@ namespace App.Data.Picture
 {
     public interface IImageData
     {
-        public string GetMainThumbNailPath(int id);
-        public List<string> GetProductThumbNailsPath(List<Product> products);
-
         public Task<Image> GetById(int id);
     }
 }
