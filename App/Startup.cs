@@ -30,13 +30,8 @@ namespace App
                 options.UseSqlServer(Configuration.GetConnectionString("LocalConnection"));
             });
 
-            //services.AddScoped<IUserData, SqlUserData>();
-            //services.AddScoped<IProductData, SqlProductData>();
-            //services.AddScoped<IImageData, SqlImageData>();
-
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IUserRepository, UserRepository>();
-            //services.AddScoped<>
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

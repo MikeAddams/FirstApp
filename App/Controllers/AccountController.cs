@@ -1,4 +1,4 @@
-﻿using App.Models.View;
+﻿using App.Models;
 using Data;
 using Managers;
 using Microsoft.AspNetCore.Authentication;
@@ -36,7 +36,7 @@ namespace App.Controllers
         [Authorize]
         public async Task<IActionResult> Profile()
         {
-            User user = await UserManager.GetByUsername(User.Identity.Name);
+            var user = await UserManager.GetByUsername(User.Identity.Name);
 
             return View(user);
         }
@@ -55,12 +55,15 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                string hashedPass = HashPassword(model.Password);
-                //User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == model.Username && x.Password == hashedPass);
+                var userEntity = new User
+                {
+                    Username = model.Username,
+                    Password = model.Password
+                };
 
-                User user = await UserManager.GetByUsername(model.Username);
+                var user = await UserManager.CheckUserCredentials(userEntity);
 
-                if (user != null && user.Password == hashedPass)
+                if (user != null)
                 {
                     await Authenticate(user.Username, user.Role);
 
@@ -69,7 +72,7 @@ namespace App.Controllers
                 ModelState.AddModelError("", "Incorrect username or password");
             }
 
-            return View(model);
+            return View();
         }
 
         [HttpPost]
@@ -78,24 +81,22 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                //User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == model.Username);
-                User user = await UserManager.GetByUsername(model.Username);
+                var usernameAvaible = await UserManager.CheckIfUsernameAvaible(model.Username);
 
-                if (user == null)
+                if (usernameAvaible)
                 {
                     var newUser = new User
                     {
                         Username = model.Username,
                         Email = model.Email,
                         Nickname = model.Nickname,
-                        Password = HashPassword(model.Password),
+                        Password = model.Password,
                         FirstName = model.FirstName,
                         LastName = model.LastName,
                         Role = RoleType.Client
                     };
 
-                    await UserManager.Add(newUser);
-
+                    await UserManager.RegisterUser(newUser);
                     await Authenticate(model.Username, RoleType.Client);
 
                     return Redirect("/Account/Profile");
@@ -104,7 +105,7 @@ namespace App.Controllers
                     ModelState.AddModelError("", "Username is already in use");
             }
 
-            return View(model);
+            return View();
         }
 
         private async Task Authenticate(string username, RoleType role)
@@ -118,19 +119,6 @@ namespace App.Controllers
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-        }
-
-        private static string HashPassword(string password, string algorithm = "sha256")
-        {
-            return Hash(Encoding.UTF8.GetBytes(password), algorithm);
-        }
-
-        private static string Hash(byte[] input, string algorithm)
-        {
-            using (var hashAlgorithm = HashAlgorithm.Create(algorithm))
-            {
-                return Convert.ToBase64String(hashAlgorithm.ComputeHash(input));
-            }
         }
     }
 }
