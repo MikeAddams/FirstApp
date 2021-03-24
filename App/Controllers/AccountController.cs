@@ -1,6 +1,6 @@
-﻿using App.Models;
-using App.Models.View;
-using App.UserData;
+﻿using App.Models.View;
+using Data;
+using Managers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -16,11 +16,11 @@ namespace App.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUserData UserData;
+        private readonly IUserManager UserManager;
 
-        public AccountController(IUserData userData)
+        public AccountController(IUserManager userManager)
         {
-            UserData = userData;
+            UserManager = userManager;
         }
 
         public IActionResult Login()
@@ -36,7 +36,7 @@ namespace App.Controllers
         [Authorize]
         public async Task<IActionResult> Profile()
         {
-            User user = await UserData.GetByUsername(User.Identity.Name);
+            User user = await UserManager.GetByUsername(User.Identity.Name);
 
             return View(user);
         }
@@ -58,7 +58,7 @@ namespace App.Controllers
                 string hashedPass = HashPassword(model.Password);
                 //User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == model.Username && x.Password == hashedPass);
 
-                User user = await UserData.GetByUsername(model.Username);
+                User user = await UserManager.GetByUsername(model.Username);
 
                 if (user != null && user.Password == hashedPass)
                 {
@@ -79,7 +79,7 @@ namespace App.Controllers
             if (ModelState.IsValid)
             {
                 //User user = await Data.Users.FirstOrDefaultAsync(x => x.Username == model.Username);
-                User user = await UserData.GetByUsername(model.Username);
+                User user = await UserManager.GetByUsername(model.Username);
 
                 if (user == null)
                 {
@@ -94,8 +94,7 @@ namespace App.Controllers
                         Role = RoleType.Client
                     };
 
-                    await UserData.Add(newUser);
-                    await UserData.Commit();
+                    await UserManager.Add(newUser);
 
                     await Authenticate(model.Username, RoleType.Client);
 

@@ -1,15 +1,31 @@
 ﻿using Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Repositories;
+using System.Threading.Tasks;
 
 namespace Managers
 {
     public class UserManager : IUserManager
     {
-        public User GetByUsername(string username)
+        private readonly IUserRepository userRepo;
+
+        public UserManager(IUserRepository _userRepo)
         {
-            
+            userRepo = _userRepo;
         }
+
+        public async Task<User> GetByUsername(string username)
+        {
+            return await userRepo.GetByUsername(username);
+        }
+
+        public async Task<User> Add(User newUser)
+        {
+            //await userRepo.Users.AddAsync(newUser);
+            await userRepo.Add(newUser);
+            await userRepo.Commit();
+
+            return newUser;
+        }
+
     }
 }

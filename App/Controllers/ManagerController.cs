@@ -1,5 +1,5 @@
 ﻿using App.Models;
-using App.UserData;
+using Managers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -8,11 +8,11 @@ namespace App.Controllers
 {
     public class ManagerController : Controller
     {
-        private readonly IUserData userData;
+        private readonly IManagerRoleManger manager;
 
-        public ManagerController(IUserData user)
+        public ManagerController(IManagerRoleManger _manager)
         {
-            userData = user;
+            manager = _manager;
         }
 
         [Authorize(Roles = "Manager")]
@@ -23,12 +23,14 @@ namespace App.Controllers
 
         public async Task<IActionResult> BecomeManager()
         {
+            /*
             User user = await userData.GetByUsername(User.Identity.Name);
 
             user.Role = RoleType.Manager;
 
             userData.Update(user);
             await userData.Commit();
+            */
 
             return RedirectToAction("Index", "Manager");
         }

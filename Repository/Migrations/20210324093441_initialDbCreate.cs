@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace App.Migrations
+namespace Repositories.Migrations
 {
-    public partial class init : Migration
+    public partial class initialDbCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

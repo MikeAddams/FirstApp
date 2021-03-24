@@ -1,7 +1,4 @@
-using App.Data.Picture;
-using App.Models.Context;
-using App.ProductData;
-using App.UserData;
+using Managers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Repositories;
+using Repositories.DataContext;
 using System;
 
 namespace App
@@ -26,14 +25,18 @@ namespace App
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContext<RepoDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("LocalConnection"));
             });
 
-            services.AddScoped<IUserData, SqlUserData>();
-            services.AddScoped<IProductData, SqlProductData>();
-            services.AddScoped<IImageData, SqlImageData>();
+            //services.AddScoped<IUserData, SqlUserData>();
+            //services.AddScoped<IProductData, SqlProductData>();
+            //services.AddScoped<IImageData, SqlImageData>();
+
+            services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            //services.AddScoped<>
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

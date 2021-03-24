@@ -1,9 +1,11 @@
 ﻿using Data;
+using System.Threading.Tasks;
 
 namespace Managers
 {
     public interface IUserManager
     {
-        public User GetByUsername(string username);
+        public Task<User> GetByUsername(string username);
+        public Task<User> Add(User newUser);
     }
 }
