@@ -23,14 +23,7 @@ namespace App.Controllers
 
         public async Task<IActionResult> BecomeManager()
         {
-            /*
-            User user = await userData.GetByUsername(User.Identity.Name);
-
-            user.Role = RoleType.Manager;
-
-            userData.Update(user);
-            await userData.Commit();
-            */
+            await manager.ChangeRoleToManager(User.Identity.Name);
 
             return RedirectToAction("Index", "Manager");
         }

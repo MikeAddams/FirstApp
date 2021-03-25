@@ -32,6 +32,7 @@ namespace App
 
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IManagerRoleManger, ManagerRoleManager>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Data;
+using System.Threading.Tasks;
 
 namespace Managers
 {
     public interface IManagerRoleManger
     {
-
+        public Task<User> ChangeRoleToManager(string username);
     }
 }
