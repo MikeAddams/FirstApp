@@ -1,4 +1,5 @@
 ﻿using App.Models;
+using Managers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,13 +14,11 @@ namespace App.Controllers
     public class HomeController : Controller
     {
 
-        //private readonly IProductData productData;
-        //private readonly IImageData imageData;
+        private readonly IProductManager prodManger;
 
-        public HomeController() // IProductData _productData, IImageData _imageData
+        public HomeController(IProductManager _prodManger)
         {
-            //productData = _productData;
-            //imageData = _imageData;
+            prodManger = _prodManger;
         }
 
         public async Task<IActionResult> IndexAsync()
@@ -34,6 +33,9 @@ namespace App.Controllers
 
             return View(products);
             */
+
+            var a = prodManger.GetLastProducts(2);
+
             return View();
         }
 

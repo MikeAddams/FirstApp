@@ -23,9 +23,36 @@ namespace Repositories
 
         public List<Product> GetLast(int count)
         {
-            List<Product> ListOfProducts = Db.Products.OrderByDescending(p => p.Id).Take(count).ToList();
+            var joinedData = Db.Products
+                .Join(
+                    Db.Images,
+                    prod => prod.ThumbNailId,
+                    thumb => thumb.Id,
+                    (prod, thumb) => new
+                    {
+                        Name = prod.Name,
+                        Price = prod.Price,
+                        thumbPath = thumb.ThumbNailPath
+                    }
+                ).ToList();
+
+            List<Product> ListOfProducts = new List<Product>();
+
+            foreach (var data in joinedData)
+            {
+                ListOfProducts.Add(new Product
+                {
+                    Name = data.Name,
+                    Price = data.Price,
+                    ThumbNail = new Image 
+                    { 
+                        ThumbNailPath = data.thumbPath 
+                    }
+                });
+            }
 
             return ListOfProducts;
         }
+
     }
 }

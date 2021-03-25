@@ -31,9 +31,12 @@ namespace App
                 options.UseSqlServer(Configuration.GetConnectionString("LocalConnection"));
             });
 
-            services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+
+            services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IManagerRoleManger, ManagerRoleManager>();
+            services.AddScoped<IProductManager, ProductManager>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
