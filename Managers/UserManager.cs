@@ -11,7 +11,7 @@ namespace Managers
     {
         private readonly IUserRepository userRepo;
 
-        private bool IsUsernameAvaible = false;
+        public bool IsUsernameAvaible = false;
 
         public UserManager(IUserRepository _userRepo)
         {
@@ -21,14 +21,6 @@ namespace Managers
         public async Task<User> GetByUsername(string username)
         {
             return await userRepo.GetByUsername(username);
-        }
-
-        public async Task<User> Add(User newUser)
-        {
-            await userRepo.Add(newUser);
-            await userRepo.Commit();
-
-            return newUser;
         }
 
         public async Task<User> CheckUserCredentials(User passedUser)
@@ -60,7 +52,8 @@ namespace Managers
             var hashedPassword = HashPassword(user.Password);
             user.Password = hashedPassword;
 
-            await Add(user);
+            await userRepo.Add(user);
+            await userRepo.Commit();
 
             return user;
         }
