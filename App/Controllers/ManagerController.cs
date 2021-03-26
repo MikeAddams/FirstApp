@@ -21,6 +21,11 @@ namespace App.Controllers
             return View();
         }
 
+        public IActionResult AddProduct()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> BecomeManager()
         {
             await manager.ChangeRoleToManager(User.Identity.Name);

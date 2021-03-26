@@ -16,6 +16,12 @@ namespace Managers
             prodRepo = _prodRepo;
         }
 
+        public async void AddNewProduct(Product prod)
+        {
+            await prodRepo.Add(prod);
+            await prodRepo.Commit();
+        }
+
         public List<Product> GetLastProducts(int count)
         {
             return prodRepo.GetLast(count);

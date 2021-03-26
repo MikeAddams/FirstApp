@@ -9,5 +9,6 @@ namespace Managers
     public interface IProductManager
     {
         public List<Product> GetLastProducts(int count);
+        public void AddNewProduct(Product prod);
     }
 }

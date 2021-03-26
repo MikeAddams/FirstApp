@@ -16,6 +16,18 @@ namespace Repositories
             Db = db;
         }
 
+        public async Task<Product> Add(Product newProduct)
+        {
+            await Db.Products.AddAsync(newProduct);
+
+            return newProduct;
+        }
+
+        public async Task<int> Commit()
+        {
+            return await Db.SaveChangesAsync();
+        }
+
         public async Task<Product> GetById(int id)
         {
             return await Db.Products.FirstOrDefaultAsync(p => p.Id == id);
