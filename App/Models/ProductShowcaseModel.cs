@@ -8,10 +8,9 @@ namespace App.Models
 {
     public class ProductShowcaseModel
     {
-        public string title { get; set; }
+        public string Title { get; set; }
         public float Price { get; set; }
 
-        public int ThumbNailId { get; set; }
-        public Image ThumbNail { get; set; }
+        public string ThumbNailPath { get; set; }
     }
 }

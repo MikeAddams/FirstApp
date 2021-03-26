@@ -21,22 +21,23 @@ namespace App.Controllers
             prodManger = _prodManger;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public IActionResult IndexAsync()
         {
-            /*
-            List<Product> products = productData.GetLast(6);
+            var products = prodManger.GetLastProducts(2);
 
-            foreach(var item in products)
+            var showcaseProds = new List<ProductShowcaseModel>();
+
+            foreach (var prod in products)
             {
-                item.ThumbNail = await imageData.GetById(item.ThumbNailId);
+                showcaseProds.Add(new ProductShowcaseModel
+                {
+                    Title = prod.Name,
+                    Price = prod.Price,
+                    ThumbNailPath = prod.ThumbNail.ThumbNailPath 
+                });
             }
 
-            return View(products);
-            */
-
-            var a = prodManger.GetLastProducts(2);
-
-            return View();
+            return View(showcaseProds);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
