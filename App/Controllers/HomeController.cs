@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,7 +35,7 @@ namespace App.Controllers
                 {
                     Title = prod.Name,
                     Price = prod.Price,
-                    ThumbNailPath = prod.ThumbNail.ThumbNailPath 
+                    ThumbNailPath = Path.Combine("\\media\\product", prod.ThumbNail.ThumbNailPath)
                 });
             }
 

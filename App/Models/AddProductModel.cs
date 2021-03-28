@@ -15,6 +15,7 @@ namespace App.Models
         public float Price { get; set; }
         [Required(ErrorMessage = "There's no product description")]
         public string Description { get; set; }
+        [Required(ErrorMessage = "Thumbnail is required")]
         public IFormFile ThumbNail { get; set; }
     }
 }

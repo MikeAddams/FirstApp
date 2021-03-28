@@ -1,4 +1,5 @@
 ﻿using App.Models;
+using Data;
 using Managers;
 using Managers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -10,13 +11,17 @@ namespace App.Controllers
     public class ManagerController : Controller
     {
         private readonly IManagerRoleManger manager;
+        private readonly IFileManager fileManager;
+        private readonly IProductManager productManager;
 
-        public ManagerController(IManagerRoleManger _manager)
+        public ManagerController(IManagerRoleManger _manager, IFileManager _fileManager, IProductManager _productManager)
         {
             manager = _manager;
+            fileManager = _fileManager;
+            productManager = _productManager;
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,Administrator")]
         public IActionResult Index()
         {
             return View();
@@ -32,7 +37,21 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                
+                string uniqueFileName = fileManager.UploadFile(model.ThumbNail);
+
+                var product = new Product()
+                {
+                    Name = model.Name,
+                    Details = model.Description,
+                    Price = model.Price,
+                    ThumbNail = new Image
+                    {
+                        ThumbNailPath = uniqueFileName
+                    },
+                    //ManagerId
+                };
+
+                productManager.AddNewProduct(product);
             }
 
             return View();

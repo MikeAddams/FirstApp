@@ -21,7 +21,7 @@ namespace Managers
         public async void AddNewProduct(Product prod)
         {
             await prodRepo.Add(prod);
-            await prodRepo.Commit();
+            //await prodRepo.Commit();
         }
 
         public List<Product> GetLastProducts(int count)
