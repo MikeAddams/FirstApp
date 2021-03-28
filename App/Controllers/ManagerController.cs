@@ -26,6 +26,17 @@ namespace App.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddProduct(AddProductModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                
+            }
+
+            return View();
+        }
+
         public async Task<IActionResult> BecomeManager()
         {
             await manager.ChangeRoleToManager(User.Identity.Name);

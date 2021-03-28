@@ -4,20 +4,27 @@
 @{
 }
 
-<form class="form-horizontal">
+@model App.Models.AddProductModel
+
+<form asp-controller="Manager" asp-action="AddProduct" 
+      class="form-horizontal" enctype="multipart/form-data">
     <fieldset>
 
         <div class="form-group">
             <label class="col-md-4 control-label">PRODUCT NAME</label>
             <div class="col-md-4">
-                <input placeholder="PRODUCT NAME" class="form-control input-md" required type="text">
+                <input asp-for="Name" type="text" 
+                       placeholder="PRODUCT NAME" class="form-control input-md" required>
+                <span asp-validation-for="Name"></span>
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-md-4 control-label">PRODUCT PRICE</label>
             <div class="col-md-4">
-                <input placeholder="PRODUCT PRICE" class="form-control input-md" required type="number">
+                <input asp-for="Price" type="number"
+                       placeholder="PRODUCT PRICE" class="form-control input-md" required>
+                <span asp-validation-for="Price"></span>
             </div>
         </div>
 
@@ -25,19 +32,21 @@
         <div class="form-group">
             <label class="col-md-4 control-label">PRODUCT DESCRIPTION</label>
             <div class="col-md-4">
-                <textarea class="form-control"></textarea>
+                <textarea asp-for="Description" type="text"
+                          class="form-control" required></textarea>
+                <span asp-validation-for="Description"></span>
             </div>
         </div>
 
         <!-- Select Basic
-    <div class="form-group">
-        <label class="col-md-4 control-label" for="product_categorie">PRODUCT CATEGORY</label>
-        <div class="col-md-4">
-            <select id="product_categorie" name="product_categorie" class="form-control">
-            </select>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="product_categorie">PRODUCT CATEGORY</label>
+            <div class="col-md-4">
+                <select id="product_categorie" name="product_categorie" class="form-control">
+                </select>
+            </div>
         </div>
-    </div>
-    -->
+        -->
 
         <div class="form-group">
             <div class="col-md-5">
@@ -45,7 +54,8 @@
                 <div class="form-group d-block">
                     <label class="col-md-4 control-label">Thumb image</label>
                     <div class="col-md-4">
-                        <input class="input-file" type="file">
+                        <input asp-for="ThumbNail" type="file"
+                               class="input-file" required>
                     </div>
                 </div>
 
@@ -59,7 +69,8 @@
                 <!-- Button -->
                 <div class="form-group d-block mt-4">
                     <div class="col-md-4">
-                        <button class="btn btn-primary btn-block">Save</button>
+                        <button type="submit"
+                                class="btn btn-primary btn-block">Save</button>
                     </div>
                 </div>
             </div>
