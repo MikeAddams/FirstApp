@@ -1,6 +1,7 @@
 ﻿using Data;
 using Microsoft.EntityFrameworkCore;
 using Repositories.DataContext;
+using Repositories.Interfaces;
 using System.Threading.Tasks;
 
 namespace Repositories

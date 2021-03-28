@@ -1,5 +1,6 @@
 ﻿using App.Models;
 using Managers;
+using Managers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

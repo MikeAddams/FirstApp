@@ -1,5 +1,7 @@
 ﻿using Data;
+using Managers.Interfaces;
 using Repositories;
+using Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -1,4 +1,5 @@
 using Managers;
+using Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Repositories;
 using Repositories.DataContext;
+using Repositories.Interfaces;
 using System;
 
 namespace App

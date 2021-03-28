@@ -1,7 +1,7 @@
 ﻿using Data;
 using System.Threading.Tasks;
 
-namespace Managers
+namespace Managers.Interfaces
 {
     public interface IManagerRoleManger
     {

@@ -1,6 +1,7 @@
 ﻿using App.Models;
 using Data;
 using Managers;
+using Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
