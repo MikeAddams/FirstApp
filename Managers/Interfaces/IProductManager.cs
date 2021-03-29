@@ -9,6 +9,6 @@ namespace Managers.Interfaces
     public interface IProductManager
     {
         public List<Product> GetLastProducts(int count);
-        public void AddNewProduct(Product prod);
+        public Task<string> AddNewProduct(Product prod);
     }
 }

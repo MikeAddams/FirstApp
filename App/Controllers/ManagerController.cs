@@ -51,10 +51,10 @@ namespace App.Controllers
                     //ManagerId
                 };
 
-                productManager.AddNewProduct(product);
+                await productManager.AddNewProduct(product);
             }
 
-            return View();
+            return RedirectToAction("Manager", "Manager");
         }
 
         public async Task<IActionResult> BecomeManager()
