@@ -33,6 +33,7 @@ namespace App.Controllers
             {
                 showcaseProds.Add(new ProductShowcaseModel
                 {
+                    Id = prod.Id,
                     Title = prod.Name,
                     Price = prod.Price,
                     ThumbNailPath = Path.Combine("\\media\\product", prod.ThumbNail.ThumbNailPath)

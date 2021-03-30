@@ -43,6 +43,7 @@ namespace Repositories
                     thumb => thumb.Id,
                     (prod, thumb) => new
                     {
+                        Id = prod.Id,
                         Name = prod.Name,
                         Price = prod.Price,
                         thumbPath = thumb.ThumbNailPath
@@ -55,6 +56,7 @@ namespace Repositories
             {
                 ListOfProducts.Add(new Product
                 {
+                    Id = data.Id,
                     Name = data.Name,
                     Price = data.Price,
                     ThumbNail = new Image 
