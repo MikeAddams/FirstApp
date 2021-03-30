@@ -10,5 +10,6 @@ namespace Managers.Interfaces
     {
         public List<Product> GetLastProducts(int count);
         public Task<string> AddNewProduct(Product prod);
+        public Task<Product> GetProductById(int id);
     }
 }

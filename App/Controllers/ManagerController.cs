@@ -54,7 +54,7 @@ namespace App.Controllers
                 await productManager.AddNewProduct(product);
             }
 
-            return RedirectToAction("Manager", "Manager");
+            return RedirectToAction("AddProduct", "Manager");
         }
 
         public async Task<IActionResult> BecomeManager()

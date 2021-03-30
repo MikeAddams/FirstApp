@@ -42,6 +42,11 @@ namespace App.Controllers
             return View(showcaseProds);
         }
 
+        public IActionResult Product(int id)
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

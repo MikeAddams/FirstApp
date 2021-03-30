@@ -18,6 +18,11 @@ namespace Managers
             prodRepo = _prodRepo;
         }
 
+        public async Task<Product> GetProductById(int id)
+        {
+            return await prodRepo.GetById(id);
+        }
+
         public async Task<string> AddNewProduct(Product prod)
         {
             await prodRepo.Add(prod);
