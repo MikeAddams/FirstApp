@@ -7,10 +7,6 @@
 @model ProductDetailsModel
 
 <style>
-    body {
-        margin-top: 20px;
-        background: #eee;
-    }
 
     /*panel*/
     .panel {
@@ -122,7 +118,6 @@
         }
 
     .pro-d-title {
-        font-size: 16px;
         margin-top: 0;
     }
 
@@ -173,49 +168,50 @@
     }
 </style>
 
-<div class="container bootdey">
+<div class="container bootdey pt-3">
     <div class="col-md-12">
         <section class="panel">
-            <div class="panel-body">
+            <div class="panel-body row">
                 <div class="col-md-6">
                     <div class="pro-img-details">
                         <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80" alt="">
                     </div>
                     <!--
-    <div class="pro-img-list">
-        <a href="#">
-            <img src="https://via.placeholder.com/115x100/87CEFA/000000" alt="">
-        </a>
-        <a href="#">
-            <img src="https://via.placeholder.com/115x100/FF7F50/000000" alt="">
-        </a>
-        <a href="#">
-            <img src="https://via.placeholder.com/115x100/20B2AA/000000" alt="">
-        </a>
-        <a href="#">
-            <img src="https://via.placeholder.com/120x100/20B2AA/000000" alt="">
-        </a>
-    </div>-->
+                    <div class="pro-img-list">
+                        <a href="#">
+                            <img src="https://via.placeholder.com/115x100/87CEFA/000000" alt="">
+                        </a>
+                        <a href="#">
+                            <img src="https://via.placeholder.com/115x100/FF7F50/000000" alt="">
+                        </a>
+                        <a href="#">
+                            <img src="https://via.placeholder.com/115x100/20B2AA/000000" alt="">
+                        </a>
+                        <a href="#">
+                            <img src="https://via.placeholder.com/120x100/20B2AA/000000" alt="">
+                        </a>
+                    </div>
+                    -->
                 </div>
-                <div class="col-md-6">
-                    <h4 class="pro-d-title">
-                        <h2 class="">
-                            @Model.Titile
-                        </h2>
-                    </h4>
+                <div class="col-md-6 pl-4">
+                    <h2 class="pro-d-title">
+                        @Model.Titile
+                    </h2>
                     <p>
                         @Model.Description
                     </p>
+                    <!--
                     <div class="product_meta">
-                        <!--
+
                         <span class="posted_in"> <strong>Categories:</strong> <a rel="tag" href="#">Jackets</a>, <a rel="tag" href="#">Men</a>, <a rel="tag" href="#">Shirts</a>, <a rel="tag" href="#">T-shirt</a>.</span>
                         <span class="tagged_as"><strong>Tags:</strong> <a rel="tag" href="#">mens</a>, <a rel="tag" href="#">womens</a>.</span>
-                        -->
+
                     </div>
-                    <div class="m-bot15"> <strong>Price : </strong><span class="pro-price">@Model.Price</span></div>
-                    <div class="form-group">
+                    -->
+                    <div class="m-bot15"> <strong>Price : </strong><span class="pro-price">$@Model.Price</span></div>
+                    <div class="form-group mt-2">
                         <label>Quantity</label>
-                        <input type="quantiy" placeholder="1" class="form-control quantity">
+                        <input placeholder="1" class="form-control quantity">
                     </div>
                     <p>
                         <button class="btn btn-round btn-danger" type="button"><i class="fa fa-shopping-cart"></i> Add to Cart</button>

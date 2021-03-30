@@ -42,7 +42,7 @@ namespace App.Controllers
             return View(showcaseProds);
         }
 
-        public IActionResult Product(int id)
+        public IActionResult NotFound()
         {
             return View();
         }

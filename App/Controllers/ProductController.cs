@@ -28,6 +28,11 @@ namespace App.Controllers
         {
             var productEntity = await prodManager.GetProductById(id);
 
+            if (productEntity == null)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
+
             var productModel = new ProductDetailsModel
             {
                 Titile = productEntity.Name,
