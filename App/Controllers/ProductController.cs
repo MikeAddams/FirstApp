@@ -38,9 +38,9 @@ namespace App.Controllers
                 Titile = productEntity.Name,
                 Description = productEntity.Details,
                 Price = productEntity.Price,
-                Image = new Image 
-                { 
-                    ThumbNailPath = "",
+                Image = new Image
+                {
+                    ThumbNailPath = productEntity.ThumbNail.ThumbNailPath,
                     FullSizePath = "",
                 }
             };

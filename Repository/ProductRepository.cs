@@ -31,7 +31,36 @@ namespace Repositories
 
         public async Task<Product> GetById(int id)
         {
-            return await Db.Products.FirstOrDefaultAsync(p => p.Id == id);
+            var joinedData = await Db.Products
+                .Join(
+                    Db.Images,
+                    prod => prod.ThumbNailId,
+                    thumb => thumb.Id,
+                    (prod, thumb) => new
+                    {
+                        Id = prod.Id,
+                        Name = prod.Name,
+                        Details = prod.Details,
+                        Price = prod.Price,
+                        Image = thumb.ThumbNailPath
+                    }
+                ).FirstOrDefaultAsync(x => x.Id == id);
+
+            
+            var product = new Product
+            {
+                Id = id,
+                Name = joinedData.Name,
+                Details = joinedData.Details,
+                Price = joinedData.Price,
+                ThumbNail = new Image
+                {
+                    ThumbNailPath = joinedData.Image,
+                    FullSizePath = ""
+                }
+            };
+
+            return product;//await Db.Products.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public List<Product> GetLast(int count)
@@ -61,7 +90,7 @@ namespace Repositories
                     Price = data.Price,
                     ThumbNail = new Image 
                     { 
-                        ThumbNailPath = data.thumbPath 
+                        ThumbNailPath = data.thumbPath
                     }
                 });
             }
