@@ -4,6 +4,7 @@ using Managers.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -40,8 +41,8 @@ namespace App.Controllers
                 Price = productEntity.Price,
                 Image = new Image
                 {
-                    ThumbNailPath = productEntity.ThumbNail.ThumbNailPath,
-                    FullSizePath = "",
+                    ThumbNailPath = "",
+                    FullSizePath = Path.Combine("\\media\\product", productEntity.ThumbNail.FullSizePath),
                 }
             };
 

@@ -42,7 +42,8 @@ namespace Repositories
                         Name = prod.Name,
                         Details = prod.Details,
                         Price = prod.Price,
-                        Image = thumb.ThumbNailPath
+                        Thumbnail = thumb.ThumbNailPath,
+                        FullSize = thumb.FullSizePath
                     }
                 ).FirstOrDefaultAsync(x => x.Id == id);
 
@@ -55,12 +56,12 @@ namespace Repositories
                 Price = joinedData.Price,
                 ThumbNail = new Image
                 {
-                    ThumbNailPath = joinedData.Image,
-                    FullSizePath = ""
+                    ThumbNailPath = joinedData.Thumbnail,
+                    FullSizePath = joinedData.FullSize
                 }
             };
 
-            return product;//await Db.Products.FirstOrDefaultAsync(x => x.Id == id);
+            return product;
         }
 
         public List<Product> GetLast(int count)
