@@ -17,5 +17,7 @@ namespace App.Models
         public string Description { get; set; }
         [Required(ErrorMessage = "Thumbnail is required")]
         public IFormFile ThumbNail { get; set; }
+        [Required(ErrorMessage = "Full size image is required")]
+        public IFormFile FullSize { get; set; }
     }
 }

@@ -37,7 +37,8 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                string uniqueFileName = fileManager.UploadFile(model.ThumbNail);
+                string uniqueThumbName = fileManager.UploadFile(model.ThumbNail);
+                string uniqueFullsizeName = fileManager.UploadFile(model.FullSize);
 
                 var product = new Product()
                 {
@@ -46,7 +47,8 @@ namespace App.Controllers
                     Price = model.Price,
                     ThumbNail = new Image
                     {
-                        ThumbNailPath = uniqueFileName
+                        ThumbNailPath = uniqueThumbName,
+                        FullSizePath = uniqueFullsizeName
                     },
                     //ManagerId
                 };
