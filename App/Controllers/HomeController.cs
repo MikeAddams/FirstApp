@@ -3,6 +3,7 @@ using Managers;
 using Managers.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,31 +17,18 @@ namespace App.Controllers
     public class HomeController : Controller
     {
 
-        private readonly IProductManager prodManger;
+        private readonly IProductService prodService;
 
-        public HomeController(IProductManager _prodManger)
+        public HomeController(IProductService _prodService)
         {
-            prodManger = _prodManger;
+            prodService = _prodService;
         }
 
         public IActionResult IndexAsync()
         {
-            var products = prodManger.GetLastProducts(2);
+            var products = prodService.GetLastProducts(10);
 
-            var showcaseProds = new List<ProductShowcaseModel>();
-
-            foreach (var prod in products)
-            {
-                showcaseProds.Add(new ProductShowcaseModel
-                {
-                    Id = prod.Id,
-                    Title = prod.Name,
-                    Price = prod.Price,
-                    ThumbNailPath = Path.Combine("\\media\\product", prod.ThumbNail.ThumbNailPath)
-                });
-            }
-
-            return View(showcaseProds);
+            return View(products);
         }
 
         public IActionResult NotFound()

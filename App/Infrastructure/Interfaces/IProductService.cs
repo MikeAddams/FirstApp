@@ -1,4 +1,5 @@
 ﻿using App.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Services.Interfaces
@@ -6,5 +7,6 @@ namespace Services.Interfaces
     public interface IProductService
     {
         public Task<ProductDetailsModel> GetProduct(int id);
+        public List<ProductShowcaseModel> GetLastProducts(int count);
     }
 }
