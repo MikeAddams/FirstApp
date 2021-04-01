@@ -4,6 +4,7 @@ using Managers;
 using Managers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace App.Controllers
@@ -40,6 +41,8 @@ namespace App.Controllers
                 string uniqueThumbName = fileManager.UploadFile(model.ThumbNail);
                 string uniqueFullsizeName = fileManager.UploadFile(model.FullSize);
 
+                int managerId = int.Parse(User.FindFirstValue("Id"));
+
                 var product = new Product()
                 {
                     Name = model.Name,
@@ -50,7 +53,7 @@ namespace App.Controllers
                         ThumbNailPath = uniqueThumbName,
                         FullSizePath = uniqueFullsizeName
                     },
-                    //ManagerId
+                    ManagerId = managerId
                 };
 
                 await productManager.AddNewProduct(product);
