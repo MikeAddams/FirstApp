@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App", "App\App.csproj", "{1D563EDB-FE08-4869-ACC3-CD556ED5C015}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{0783B718-20E5-4BD0-9C78-BEE7FACDB432}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{0783B718-20E5-4BD0-9C78-BEE7FACDB432}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "Repository\Repositories.csproj", "{286BA258-4F3D-47FA-A626-0375B3B80991}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositories", "Repository\Repositories.csproj", "{286BA258-4F3D-47FA-A626-0375B3B80991}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Managers", "Managers\Managers.csproj", "{0FD69D92-1486-4FC3-8421-B6CB1E8A6382}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Managers", "Managers\Managers.csproj", "{0FD69D92-1486-4FC3-8421-B6CB1E8A6382}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

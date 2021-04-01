@@ -1,17 +1,17 @@
 using Managers;
+using Repositories;
+using Services;
 using Managers.Interfaces;
+using Services.Interfaces;
+using Repositories.Interfaces;
+using Repositories.DataContext;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Repositories;
-using Repositories.DataContext;
-using Repositories.Interfaces;
 using System;
 
 namespace App
@@ -25,7 +25,6 @@ namespace App
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<RepoDbContext>(options =>
@@ -35,6 +34,8 @@ namespace App
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IManagerRoleManger, ManagerRoleManager>();

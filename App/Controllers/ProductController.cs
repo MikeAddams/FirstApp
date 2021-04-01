@@ -1,22 +1,16 @@
-﻿using App.Models;
-using Data;
-using Managers.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
+using Services.Interfaces;
 using System.Threading.Tasks;
 
 namespace App.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IProductManager prodManager;
+        private readonly IProductService prodService;
 
-        public ProductController(IProductManager _prodManager)
+        public ProductController(IProductService _prodService)
         {
-            prodManager = _prodManager;
+            prodService = _prodService;
         }
 
         public IActionResult Index()
@@ -27,26 +21,14 @@ namespace App.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var productEntity = await prodManager.GetProductById(id);
+            var product = await prodService.GetProduct(id);
 
-            if (productEntity == null)
+            if (product == null)
             {
                 return RedirectToAction("NotFound", "Home");
             }
 
-            var productModel = new ProductDetailsModel
-            {
-                Titile = productEntity.Name,
-                Description = productEntity.Details,
-                Price = productEntity.Price,
-                Image = new Image
-                {
-                    ThumbNailPath = "",
-                    FullSizePath = Path.Combine("\\media\\product", productEntity.ThumbNail.FullSizePath),
-                }
-            };
-
-            return View(productModel);
+            return View(product);
         }
     }
 }
