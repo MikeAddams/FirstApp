@@ -78,7 +78,7 @@ namespace Repositories
                         Price = prod.Price,
                         thumbPath = thumb.ThumbNailPath
                     }
-                ).ToList();
+                ).Take(count).ToList();
 
             List<Product> ListOfProducts = new List<Product>();
 
