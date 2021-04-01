@@ -44,11 +44,11 @@ namespace Managers
             return user;
         }
 
-        public async Task<User> RegisterUser(User user)
+        public async Task<int> RegisterUser(User user)
         {
             if (!IsUsernameAvaible)
             {
-                return null;
+                return 0;
             }
 
             var hashedPassword = HashPassword(user.Password);
@@ -57,7 +57,9 @@ namespace Managers
             await userRepo.Add(user);
             await userRepo.Commit();
 
-            return user;
+            int userId = await userRepo.GetLastUserId();
+
+            return userId;
         }
 
         public async Task<bool> CheckIfUsernameAvaible(string username)

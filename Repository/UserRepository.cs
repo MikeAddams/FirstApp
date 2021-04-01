@@ -38,6 +38,11 @@ namespace Repositories
             return updatedUser;
         }
 
+        public async Task<int> GetLastUserId()
+        {
+            return await Db.Users.MaxAsync(x => x.Id);
+        }
+
         public async Task<int> Commit()
         {
             return await Db.SaveChangesAsync();

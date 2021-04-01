@@ -41,8 +41,8 @@ namespace App.Controllers
                 Price = productEntity.Price,
                 Image = new Image
                 {
-                    ThumbNailPath = productEntity.ThumbNail.ThumbNailPath,
-                    FullSizePath = "",
+                    ThumbNailPath = "",
+                    FullSizePath = Path.Combine("\\media\\product", productEntity.ThumbNail.FullSizePath),
                 }
             };
 

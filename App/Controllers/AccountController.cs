@@ -5,6 +5,7 @@ using Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -66,7 +67,7 @@ namespace App.Controllers
 
                 if (user != null)
                 {
-                    await Authenticate(user.Username, user.Role);
+                    await Authenticate(user.Id, user.Username, user.Role);
 
                     return Redirect("/Account/Profile");
                 }
@@ -97,8 +98,8 @@ namespace App.Controllers
                         Role = RoleType.Client
                     };
 
-                    await UserManager.RegisterUser(newUser);
-                    await Authenticate(model.Username, RoleType.Client);
+                    int userId = await UserManager.RegisterUser(newUser);
+                    await Authenticate(userId, model.Username, RoleType.Client);
 
                     return Redirect("/Account/Profile");
                 }
@@ -109,12 +110,13 @@ namespace App.Controllers
             return View();
         }
 
-        private async Task Authenticate(string username, RoleType role)
+        private async Task Authenticate(int id, string username, RoleType role)
         {
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, username),
-                new Claim(ClaimTypes.Role, role.ToString())
+                new Claim(ClaimTypes.Role, role.ToString()),
+                new Claim("Id", id.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
