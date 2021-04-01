@@ -1,9 +1,8 @@
 ﻿using App.Models;
-using Data;
-using Managers;
 using Managers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.Interfaces;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -12,14 +11,14 @@ namespace App.Controllers
     public class ManagerController : Controller
     {
         private readonly IManagerRoleManger manager;
-        private readonly IFileManager fileManager;
-        private readonly IProductManager productManager;
 
-        public ManagerController(IManagerRoleManger _manager, IFileManager _fileManager, IProductManager _productManager)
+        private readonly IProductService prodService;
+
+        public ManagerController(IManagerRoleManger _manager, IProductService _prodService)
         {
             manager = _manager;
-            fileManager = _fileManager;
-            productManager = _productManager;
+
+            prodService = _prodService;
         }
 
         [Authorize(Roles = "Manager,Administrator")]
@@ -38,25 +37,9 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                string uniqueThumbName = fileManager.UploadFile(model.ThumbNail);
-                string uniqueFullsizeName = fileManager.UploadFile(model.FullSize);
-
                 int managerId = int.Parse(User.FindFirstValue("Id"));
 
-                var product = new Product()
-                {
-                    Name = model.Name,
-                    Details = model.Description,
-                    Price = model.Price,
-                    ThumbNail = new Image
-                    {
-                        ThumbNailPath = uniqueThumbName,
-                        FullSizePath = uniqueFullsizeName
-                    },
-                    ManagerId = managerId
-                };
-
-                await productManager.AddNewProduct(product);
+                await prodService.AddProduct(model, managerId);
             }
 
             return RedirectToAction("AddProduct", "Manager");

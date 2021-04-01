@@ -8,5 +8,6 @@ namespace Services.Interfaces
     {
         public Task<ProductDetailsModel> GetProduct(int id);
         public List<ProductShowcaseModel> GetLastProducts(int count);
+        public Task<bool> AddProduct(AddProductModel product, int managerId);
     }
 }

@@ -11,10 +11,35 @@ namespace Services
     public class ProductService : IProductService
     {
         private readonly IProductManager prodManager;
+        private readonly IFileManager fileManager;
 
-        public ProductService(IProductManager _prodManager)
+        public ProductService(IProductManager _prodManager, IFileManager _fileManager)
         {
             prodManager = _prodManager;
+            fileManager = _fileManager;
+        }
+
+        public async Task<bool> AddProduct(AddProductModel prodModel, int managerId)
+        {
+            string uniqueThumbName = fileManager.UploadFile(prodModel.ThumbNail);
+            string uniqueFullsizeName = fileManager.UploadFile(prodModel.FullSize);
+
+            var product = new Product()
+            {
+                Name = prodModel.Name,
+                Details = prodModel.Description,
+                Price = prodModel.Price,
+                ThumbNail = new Image
+                {
+                    ThumbNailPath = uniqueThumbName,
+                    FullSizePath = uniqueFullsizeName
+                },
+                ManagerId = managerId
+            };
+
+            await prodManager.AddNewProduct(product);
+
+            return true;
         }
 
         public List<ProductShowcaseModel> GetLastProducts(int count)
