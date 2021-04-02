@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using App.Infrastructure.Interfaces;
+using App.Infrastructure;
 
 namespace App
 {
@@ -36,6 +38,7 @@ namespace App
             services.AddScoped<IProductRepository, ProductRepository>();
 
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IManagerRoleManger, ManagerRoleManager>();

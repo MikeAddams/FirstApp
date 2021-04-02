@@ -1,28 +1,24 @@
-﻿using App.Models;
+﻿using App.Infrastructure.Interfaces;
+using App.Models;
 using Data;
-using Managers;
-using Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace App.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUserManager UserManager;
+        private readonly IUserService userService;
 
-        public AccountController(IUserManager userManager)
+        public AccountController(IUserService _userService)
         {
-            UserManager = userManager;
+            userService = _userService;
         }
 
         public IActionResult Login()
@@ -38,9 +34,9 @@ namespace App.Controllers
         [Authorize]
         public async Task<IActionResult> Profile()
         {
-            var user = await UserManager.GetByUsername(User.Identity.Name);
+            var userModel = await userService.GetUserDetails(User.Identity.Name);
 
-            return View(user);
+            return View(userModel);
         }
 
         [HttpPost]
@@ -57,21 +53,16 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userEntity = new User
-                {
-                    Username = model.Username,
-                    Password = model.Password
-                };
+                var userModel = await userService.ValidateUser(model);
 
-                var user = await UserManager.CheckUserCredentials(userEntity);
-
-                if (user != null)
+                if (userModel != null)
                 {
-                    await Authenticate(user.Id, user.Username, user.Role);
+                    await Authenticate(userModel.Id, userModel.Username, userModel.Role);
 
                     return Redirect("/Account/Profile");
                 }
-                ModelState.AddModelError("", "Incorrect username or password");
+                else
+                    ModelState.AddModelError("", "Incorrect username or password");
             }
 
             return View();
@@ -83,28 +74,16 @@ namespace App.Controllers
         {
             if (ModelState.IsValid)
             {
-                var usernameAvaible = await UserManager.CheckIfUsernameAvaible(model.Username);
+                var userModel = await userService.RegisterUser(model);
 
-                if (usernameAvaible)
+                if (userModel == null)
                 {
-                    var newUser = new User
-                    {
-                        Username = model.Username,
-                        Email = model.Email,
-                        Nickname = model.Nickname,
-                        Password = model.Password,
-                        FirstName = model.FirstName,
-                        LastName = model.LastName,
-                        Role = RoleType.Client
-                    };
-
-                    int userId = await UserManager.RegisterUser(newUser);
-                    await Authenticate(userId, model.Username, RoleType.Client);
-
-                    return Redirect("/Account/Profile");
-                }
-                else
                     ModelState.AddModelError("", "Username is already in use");
+                } 
+
+                await Authenticate(userModel.Id, userModel.Username, userModel.Role);
+
+                return Redirect("/Account/Profile");
             }
 
             return View();
