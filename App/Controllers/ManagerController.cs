@@ -32,6 +32,11 @@ namespace App.Controllers
             return View();
         }
 
+        public IActionResult MyProducts()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddProduct(AddProductModel model)
         {

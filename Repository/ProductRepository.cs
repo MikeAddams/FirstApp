@@ -99,5 +99,10 @@ namespace Repositories
             return ListOfProducts;
         }
 
+        public List<Product> GetProductsByManagerId(int managerId)
+        {
+            return Db.Products.Where(x => x.ManagerId == managerId).ToList();
+        }
+
     }
 }

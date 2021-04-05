@@ -10,5 +10,6 @@ namespace Repositories.Interfaces
         public Task<Product> Add(Product newProduct);
         public Task<int> Commit();
         public List<Product> GetLast(int count);
+        public List<Product> GetProductsByManagerId(int managerId);
     }
 }

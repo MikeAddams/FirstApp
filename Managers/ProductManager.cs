@@ -36,5 +36,10 @@ namespace Managers
             return prodRepo.GetLast(count);
         }
 
+        public List<Product> GetProductsByManagerId(int managerId)
+        {
+            return prodRepo.GetProductsByManagerId(managerId);
+        }
+
     }
 }
