@@ -101,7 +101,38 @@ namespace Repositories
 
         public List<Product> GetProductsByManagerId(int managerId)
         {
-            return Db.Products.Where(x => x.ManagerId == managerId).ToList();
+            var joinedData = Db.Products
+                .Where(x => x.ManagerId == managerId)
+                .Join(
+                    Db.Images,
+                    prod => prod.ThumbNailId,
+                    thumb => thumb.Id,
+                    (prod, thumb) => new
+                    {
+                        Id = prod.Id,
+                        Name = prod.Name,
+                        Price = prod.Price,
+                        thumbPath = thumb.ThumbNailPath
+                    }
+                ).ToList();
+
+            List<Product> ListOfProducts = new List<Product>();
+
+            foreach (var data in joinedData)
+            {
+                ListOfProducts.Add(new Product
+                {
+                    Id = data.Id,
+                    Name = data.Name,
+                    Price = data.Price,
+                    ThumbNail = new Image
+                    {
+                        ThumbNailPath = data.thumbPath
+                    }
+                });
+            }
+
+            return ListOfProducts;
         }
 
     }
