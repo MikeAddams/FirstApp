@@ -9,7 +9,6 @@ namespace App.Infrastructure.Interfaces
 {
     public interface IManagerService
     {
-        public List<ProductShowcaseModel> GetManagerProducts(int id);
         public Task<bool> ChangeRoleToManager(string username);
     }
 }

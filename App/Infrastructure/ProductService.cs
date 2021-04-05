@@ -85,5 +85,25 @@ namespace Services
 
             return prodModel;
         }
+
+        public List<ProductShowcaseModel> GetManagerProducts(int id)
+        {
+            var prodEntity = prodManager.GetProductsByManagerId(id);
+            var prodModel = new List<ProductShowcaseModel>();
+
+            foreach (var prod in prodEntity)
+            {
+                prodModel.Add(new ProductShowcaseModel
+                {
+                    Id = prod.Id,
+                    Title = prod.Name,
+                    Price = prod.Price,
+                    ThumbNailPath = Path.Combine("\\media\\product", prod.ThumbNail.ThumbNailPath)
+
+                });
+            }
+
+            return prodModel;
+        }
     }
 }

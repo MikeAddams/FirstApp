@@ -35,7 +35,7 @@ namespace App.Controllers
         public IActionResult MyProducts()
         {
             var userId = Int32.Parse(User.FindFirstValue("Id"));
-            var productsModel = managerService.GetManagerProducts(userId);
+            var productsModel = prodService.GetManagerProducts(userId);
 
             return View(productsModel);
         }
