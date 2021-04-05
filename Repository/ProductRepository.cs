@@ -24,6 +24,14 @@ namespace Repositories
             return newProduct;
         }
 
+        public void Delete(int productId)
+        {
+            var product = new Product { Id = productId };
+
+            var entity = Db.Products.Attach(product);
+            entity.State = EntityState.Deleted;
+        }
+
         public async Task<int> Commit()
         {
             return await Db.SaveChangesAsync();

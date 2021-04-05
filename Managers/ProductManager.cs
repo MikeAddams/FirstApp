@@ -31,6 +31,12 @@ namespace Managers
             return ""; //
         }
 
+        public void DeleteProduct(int productId)
+        {
+            prodRepo.Delete(productId);
+            prodRepo.Commit();
+        }
+
         public List<Product> GetLastProducts(int count)
         {
             return prodRepo.GetLast(count);

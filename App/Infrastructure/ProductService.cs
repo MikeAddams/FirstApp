@@ -42,6 +42,11 @@ namespace Services
             return true;
         }
 
+        public void DeleteProduct(int productId)
+        {
+            prodManager.DeleteProduct(productId);
+        }
+
         public List<ProductShowcaseModel> GetLastProducts(int count)
         {
             List<Product> prodEntity = prodManager.GetLastProducts(count);

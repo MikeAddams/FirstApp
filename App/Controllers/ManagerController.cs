@@ -60,5 +60,12 @@ namespace App.Controllers
             return RedirectToAction("Index", "Manager");
         }
 
+        public IActionResult DeleteProduct(int id)
+        {
+            prodService.DeleteProduct(id);
+
+            return RedirectToAction("MyProducts", "Manager");
+        }
+
     }
 }
