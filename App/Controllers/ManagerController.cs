@@ -1,8 +1,10 @@
-﻿using App.Models;
+﻿using App.Infrastructure.Interfaces;
+using App.Models;
 using Managers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -10,15 +12,13 @@ namespace App.Controllers
 {
     public class ManagerController : Controller
     {
-        private readonly IManagerRoleManger manager;
-
         private readonly IProductService prodService;
+        private readonly IManagerService managerService;
 
-        public ManagerController(IManagerRoleManger _manager, IProductService _prodService)
+        public ManagerController(IProductService _prodService, IManagerService _managerService)
         {
-            manager = _manager;
-
             prodService = _prodService;
+            managerService = _managerService;
         }
 
         [Authorize(Roles = "Manager,Administrator")]
@@ -34,7 +34,10 @@ namespace App.Controllers
 
         public IActionResult MyProducts()
         {
-            return View();
+            var userId = Int32.Parse(User.FindFirstValue("Id"));
+            var productsModel = managerService.GetManagerProducts(userId);
+
+            return View(productsModel);
         }
 
         [HttpPost]
@@ -52,7 +55,7 @@ namespace App.Controllers
 
         public async Task<IActionResult> BecomeManager()
         {
-            await manager.ChangeRoleToManager(User.Identity.Name);
+            await managerService.ChangeRoleToManager(User.Identity.Name);
 
             return RedirectToAction("Index", "Manager");
         }

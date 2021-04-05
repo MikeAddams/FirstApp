@@ -39,6 +39,7 @@ namespace App
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IManagerService, ManagerService>();
 
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IManagerRoleManger, ManagerRoleManager>();
