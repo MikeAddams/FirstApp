@@ -35,15 +35,9 @@ namespace App.Controllers
         public IActionResult MyProducts()
         {
             var userId = Int32.Parse(User.FindFirstValue("Id"));
-            var productsModel = prodService.GetManagerProducts(userId);
+            var managerProdModel = prodService.GetManagerProducts(userId);
 
-            var a = new ManagerProductsModel
-            {
-                ShowcaseProducts = productsModel,
-                DeleteProductId = 0
-            };
-
-            return View(a);
+            return View(managerProdModel);
         }
 
         [HttpPost]

@@ -9,7 +9,7 @@ namespace Services.Interfaces
         public Task<ProductDetailsModel> GetProduct(int id);
         public List<ProductShowcaseModel> GetLastProducts(int count);
         public Task<bool> AddProduct(AddProductModel product, int managerId);
-        public List<ProductShowcaseModel> GetManagerProducts(int id);
+        public ManagerProductsModel GetManagerProducts(int id);
         public Task DeleteProduct(int productId);
     }
 }

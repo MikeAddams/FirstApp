@@ -91,7 +91,7 @@ namespace Services
             return prodModel;
         }
 
-        public List<ProductShowcaseModel> GetManagerProducts(int id)
+        public ManagerProductsModel GetManagerProducts(int id)
         {
             var prodEntity = prodManager.GetProductsByManagerId(id);
             var prodModel = new List<ProductShowcaseModel>();
@@ -108,7 +108,13 @@ namespace Services
                 });
             }
 
-            return prodModel;
+            var managerProdModel = new ManagerProductsModel
+            {
+                ShowcaseProducts = prodModel,
+                DeleteProductId = -1
+            };
+
+            return managerProdModel;
         }
     }
 }
