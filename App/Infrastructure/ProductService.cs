@@ -116,5 +116,45 @@ namespace Services
 
             return managerProdModel;
         }
+
+        public async Task<EditProductModel> GetEditProductModel(int id)
+        {
+            Product prodEntity = await prodManager.GetProductById(id);
+
+            if (prodEntity == null)
+            {
+                return null;
+            }
+
+            var editProdModel = new EditProductModel
+            {
+                Title = prodEntity.Name,
+                Description = prodEntity.Details,
+                Price = prodEntity.Price,
+                //ThumbNail = new IFormFile
+
+                /*
+                Image = new Image
+                {
+                    ThumbNailPath = "",
+                    FullSizePath = Path.Combine("\\media\\product", prodEntity.ThumbNail.FullSizePath),
+                }
+                */
+            };
+
+            return editProdModel;
+        }
+
+        public async Task UpdateProduct(EditProductModel updatedProd)
+        {
+            var prodEntity = await prodManager.GetProductById(updatedProd.Id);
+
+            prodEntity.Name = updatedProd.Title;
+            prodEntity.Details = updatedProd.Description;
+            prodEntity.Price = updatedProd.Price;
+            //prodEntity.ThumbNail
+
+            await prodManager.UpdateProduct(prodEntity);
+        }
     }
 }

@@ -32,6 +32,22 @@ namespace App.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditProduct(int id)
+        {
+            EditProductModel prodModel = await prodService.GetEditProductModel(id);
+
+            return View(prodModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProduct(EditProductModel updatedModel)
+        {
+            await prodService.UpdateProduct(updatedModel);
+
+            return RedirectToAction("MyProducts");
+        }
+
         public IActionResult MyProducts()
         {
             var userId = Int32.Parse(User.FindFirstValue("Id"));

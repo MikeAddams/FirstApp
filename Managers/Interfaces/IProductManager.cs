@@ -13,5 +13,6 @@ namespace Managers.Interfaces
         public Task<Product> GetProductById(int id);
         public List<Product> GetProductsByManagerId(int managerId);
         public Task DeleteProduct(int productId);
+        public Task UpdateProduct(Product updatedProduct);
     }
 }

@@ -11,5 +11,7 @@ namespace Services.Interfaces
         public Task<bool> AddProduct(AddProductModel product, int managerId);
         public ManagerProductsModel GetManagerProducts(int id);
         public Task DeleteProduct(int productId);
+        public Task<EditProductModel> GetEditProductModel(int id);
+        public Task UpdateProduct(EditProductModel updatedProd);
     }
 }

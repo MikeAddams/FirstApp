@@ -1,0 +1,71 @@
+﻿@{
+}
+
+@model EditProductModel
+
+<form asp-controller="Manager" asp-action="EditProduct" method="POST"
+      class="form-horizontal" enctype="multipart/form-data">
+    <fieldset>
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group">
+            <label class="col-md-4 control-label">PRODUCT NAME</label>
+            <div class="col-md-4">
+                <input asp-for="Title" type="text"
+                       placeholder="PRODUCT NAME" class="form-control input-md" required>
+                <span asp-validation-for="Title"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label">PRODUCT PRICE</label>
+            <div class="col-md-4">
+                <input asp-for="Price" type="number"
+                       placeholder="PRODUCT PRICE" class="form-control input-md" required>
+                <span asp-validation-for="Price"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label">PRODUCT DESCRIPTION</label>
+            <div class="col-md-4">
+                <textarea asp-for="Description" type="text"
+                          class="form-control" required></textarea>
+                <span asp-validation-for="Description"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-5">
+
+                <div class="form-group d-block">
+                    <label class="col-md-4 control-label">Thumb image</label>
+                    <div class="col-md-4">
+                        <input asp-for="UpdatedThumbNail" type="file"
+                               class="input-file">
+                    </div>
+                </div>
+
+                <div class="form-group d-block">
+                    <label class="col-md-4 control-label">Full size image</label>
+                    <div class="col-md-4">
+                        <input asp-for="UpdatedFullSize" type="file"
+                               class="input-file">
+                    </div>
+                </div>
+
+                <!-- Button -->
+                <div class="form-group d-block mt-4">
+                    <div class="col-md-4">
+                        <button type="submit"
+                                class="btn btn-primary btn-block">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
+</form>

@@ -12,5 +12,6 @@ namespace Repositories.Interfaces
         public List<Product> GetLast(int count);
         public List<Product> GetProductsByManagerId(int managerId);
         public void Delete(int productId);
+        public void Update(Product updatedProduct);
     }
 }

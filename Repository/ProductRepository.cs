@@ -50,6 +50,7 @@ namespace Repositories
                         Name = prod.Name,
                         Details = prod.Details,
                         Price = prod.Price,
+                        ManagerId = prod.ManagerId,
                         Thumbnail = thumb.ThumbNailPath,
                         FullSize = thumb.FullSizePath
                     }
@@ -62,6 +63,7 @@ namespace Repositories
                 Name = joinedData.Name,
                 Details = joinedData.Details,
                 Price = joinedData.Price,
+                ManagerId = joinedData.ManagerId,
                 ThumbNail = new Image
                 {
                     ThumbNailPath = joinedData.Thumbnail,
@@ -141,6 +143,11 @@ namespace Repositories
             }
 
             return ListOfProducts;
+        }
+
+        public void Update(Product updatedProduct)
+        {
+            Db.Products.Update(updatedProduct);
         }
 
     }

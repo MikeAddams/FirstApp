@@ -36,6 +36,12 @@ namespace Managers
             await prodRepo.Commit();
         }
 
+        public async Task UpdateProduct(Product updatedProduct)
+        {
+            prodRepo.Update(updatedProduct);
+            await prodRepo.Commit();
+        }
+
         public List<Product> GetLastProducts(int count)
         {
             return prodRepo.GetLast(count);
