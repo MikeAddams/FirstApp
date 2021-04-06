@@ -1,15 +1,12 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
 }
 
-@model List<ProductShowcaseModel>
+@model ManagerProductsModel
 
 <span class="d-block h3 text-white bg-dark p-2 m-0">My Products</span>
 <div class="row">
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.ShowcaseProducts)
     {
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-90" style="height: 100%;">
@@ -25,8 +22,10 @@
                 </div>
                 <div class="card-footer">
                     <a class="btn btn-info">Edit</a>
-                    <a asp-controller="Manager" asp-action="DeleteProduct" asp-route-id="@item.Id"
-                       class="btn btn-danger">Remove</a>
+                    <form asp-controller="Manager" asp-action="DeleteProduct" method="post" class="d-inline">
+                        <input type="submit" value="Remove" class="btn btn-danger" />
+                        <input type="hidden" value="@item.Id" asp-for="DeleteProductId" />
+                    </form>
                 </div>
             </div>
         </div>

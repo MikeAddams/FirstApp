@@ -1,6 +1,5 @@
 ﻿using Data;
 using Managers.Interfaces;
-using Repositories;
 using Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -31,10 +30,10 @@ namespace Managers
             return ""; //
         }
 
-        public void DeleteProduct(int productId)
+        public async Task DeleteProduct(int productId)
         {
             prodRepo.Delete(productId);
-            prodRepo.Commit();
+            await prodRepo.Commit();
         }
 
         public List<Product> GetLastProducts(int count)

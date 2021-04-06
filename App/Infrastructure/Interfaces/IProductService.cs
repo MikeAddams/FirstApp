@@ -10,6 +10,6 @@ namespace Services.Interfaces
         public List<ProductShowcaseModel> GetLastProducts(int count);
         public Task<bool> AddProduct(AddProductModel product, int managerId);
         public List<ProductShowcaseModel> GetManagerProducts(int id);
-        public void DeleteProduct(int productId);
+        public Task DeleteProduct(int productId);
     }
 }

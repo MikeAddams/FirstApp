@@ -37,7 +37,13 @@ namespace App.Controllers
             var userId = Int32.Parse(User.FindFirstValue("Id"));
             var productsModel = prodService.GetManagerProducts(userId);
 
-            return View(productsModel);
+            var a = new ManagerProductsModel
+            {
+                ShowcaseProducts = productsModel,
+                DeleteProductId = 0
+            };
+
+            return View(a);
         }
 
         [HttpPost]
@@ -60,12 +66,15 @@ namespace App.Controllers
             return RedirectToAction("Index", "Manager");
         }
 
-        public IActionResult DeleteProduct(int id)
+        [HttpPost]
+        [Authorize(Roles = "Manager,Administrator")]
+        public async Task<IActionResult> DeleteProduct(ManagerProductsModel manProdModel)
         {
-            prodService.DeleteProduct(id);
+            var productId = manProdModel.DeleteProductId;
+
+            await prodService.DeleteProduct(productId);
 
             return RedirectToAction("MyProducts", "Manager");
         }
-
     }
 }
