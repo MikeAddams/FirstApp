@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Data;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace App.Models
@@ -14,7 +15,10 @@ namespace App.Models
         [Required(ErrorMessage = "There's no product description")]
         public string Description { get; set; }
 
-        //public Image 
+        //public string OldThumbnailPath { get; set; }
+        //public string OldFullSizePath { get; set; }
+
+        public Image CurrentImage { get; set; }
 
         public IFormFile UpdatedThumbNail { get; set; }
         public IFormFile UpdatedFullSize { get; set; }

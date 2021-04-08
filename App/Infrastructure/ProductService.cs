@@ -12,11 +12,13 @@ namespace Services
     {
         private readonly IProductManager prodManager;
         private readonly IFileManager fileManager;
+        private readonly IImageManager imgManager;
 
-        public ProductService(IProductManager _prodManager, IFileManager _fileManager)
+        public ProductService(IProductManager _prodManager, IFileManager _fileManager, IImageManager _imgManager)
         {
             prodManager = _prodManager;
             fileManager = _fileManager;
+            imgManager = _imgManager;
         }
 
         public async Task<bool> AddProduct(AddProductModel prodModel, int managerId)
@@ -131,15 +133,13 @@ namespace Services
                 Title = prodEntity.Name,
                 Description = prodEntity.Details,
                 Price = prodEntity.Price,
-                //ThumbNail = new IFormFile
 
-                /*
-                Image = new Image
+                CurrentImage = new Image
                 {
-                    ThumbNailPath = "",
+                    Id = prodEntity.ThumbNail.Id,
+                    ThumbNailPath = Path.Combine("\\media\\product", prodEntity.ThumbNail.ThumbNailPath),
                     FullSizePath = Path.Combine("\\media\\product", prodEntity.ThumbNail.FullSizePath),
                 }
-                */
             };
 
             return editProdModel;
@@ -152,7 +152,28 @@ namespace Services
             prodEntity.Name = updatedProd.Title;
             prodEntity.Details = updatedProd.Description;
             prodEntity.Price = updatedProd.Price;
-            //prodEntity.ThumbNail
+
+            if (updatedProd.UpdatedThumbNail != null || updatedProd.UpdatedFullSize != null)
+            {
+                var currentImageEntity = await imgManager.GetImageById(updatedProd.CurrentImage.Id);
+
+                if (updatedProd.UpdatedThumbNail != null)
+                {
+                    string uniqueThumbName = fileManager.UploadFile(updatedProd.UpdatedThumbNail);
+
+                    currentImageEntity.ThumbNailPath = uniqueThumbName;
+                }
+
+                if (updatedProd.UpdatedFullSize != null)
+                {
+                    string uniqueFullsizeName = fileManager.UploadFile(updatedProd.UpdatedFullSize);
+
+                    currentImageEntity.FullSizePath = uniqueFullsizeName;
+                }
+
+                //await imgManager.UpdateImage(currentImageEntity);
+                prodEntity.ThumbNail = currentImageEntity;
+            }
 
             await prodManager.UpdateProduct(prodEntity);
         }

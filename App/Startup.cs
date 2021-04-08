@@ -36,6 +36,7 @@ namespace App
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IImageRepository, ImageRepository>();
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUserService, UserService>();
@@ -45,6 +46,7 @@ namespace App
             services.AddScoped<IManagerRoleManger, ManagerRoleManager>();
             services.AddScoped<IProductManager, ProductManager>();
             services.AddScoped<IFileManager, FileManager>();
+            services.AddScoped<IImageManager, ImageManager>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
-    class ImageRepository : IImageRepository
+    public class ImageRepository : IImageRepository
     {
         private readonly RepoDbContext Db;
 
@@ -18,6 +18,16 @@ namespace Repositories
         public async Task<Image> GetById(int id)
         {
             return await Db.Images.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public void Update(Image updatedImage)
+        {
+            Db.Images.Update(updatedImage);
+        }
+
+        public async Task<int> Commit()
+        {
+            return await Db.SaveChangesAsync();
         }
     }
 }

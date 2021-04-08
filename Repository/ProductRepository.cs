@@ -51,8 +51,12 @@ namespace Repositories
                         Details = prod.Details,
                         Price = prod.Price,
                         ManagerId = prod.ManagerId,
-                        Thumbnail = thumb.ThumbNailPath,
-                        FullSize = thumb.FullSizePath
+                        Thumb = new Image
+                        {
+                            Id = thumb.Id,
+                            ThumbNailPath = thumb.ThumbNailPath,
+                            FullSizePath = thumb.FullSizePath
+                        }
                     }
                 ).FirstOrDefaultAsync(x => x.Id == id);
 
@@ -64,11 +68,7 @@ namespace Repositories
                 Details = joinedData.Details,
                 Price = joinedData.Price,
                 ManagerId = joinedData.ManagerId,
-                ThumbNail = new Image
-                {
-                    ThumbNailPath = joinedData.Thumbnail,
-                    FullSizePath = joinedData.FullSize
-                }
+                ThumbNail = joinedData.Thumb
             };
 
             return product;
