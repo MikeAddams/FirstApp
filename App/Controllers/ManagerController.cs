@@ -35,7 +35,9 @@ namespace App.Controllers
         [HttpGet]
         public async Task<IActionResult> EditProduct(int id)
         {
-            EditProductModel prodModel = await prodService.GetEditProductModel(id);
+            int userId = int.Parse(User.FindFirstValue("Id"));
+
+            EditProductModel prodModel = await prodService.GetEditProductModel(id, userId);
 
             if (prodModel == null)
             {
@@ -49,7 +51,8 @@ namespace App.Controllers
         [HttpPost]
         public async Task<IActionResult> EditProduct(EditProductModel updatedModel)
         {
-            await prodService.UpdateProduct(updatedModel);
+            var userId = int.Parse(User.FindFirstValue("Id"));
+            await prodService.UpdateProduct(updatedModel, userId);
 
             return RedirectToAction("MyProducts");
         }

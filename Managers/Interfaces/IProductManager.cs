@@ -10,9 +10,11 @@ namespace Managers.Interfaces
     {
         public List<Product> GetLastProducts(int count);
         public Task<string> AddNewProduct(Product prod);
-        public Task<Product> GetProductById(int id);
         public List<Product> GetProductsByManagerId(int managerId);
         public Task DeleteProduct(int productId);
-        public Task UpdateProduct(Product updatedProduct);
+        public Task UpdateProduct(Product updatedProduct, int managerId);
+
+        public Task<Product> GetProductById(int productId);
+        public Task<Product> GetProduct(int productId, int managerId);
     }
 }

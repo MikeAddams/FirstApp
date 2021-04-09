@@ -17,9 +17,21 @@ namespace Managers
             prodRepo = _prodRepo;
         }
 
-        public async Task<Product> GetProductById(int id)
+        public async Task<Product> GetProductById(int productId)
         {
-            return await prodRepo.GetById(id);
+            return await prodRepo.GetById(productId);
+        }
+
+        public async Task<Product> GetProduct(int productId, int managerId)
+        {
+            var product = await prodRepo.GetById(productId);
+
+            if (product == null || product.ManagerId != managerId)
+            {
+                return null;
+            }
+
+            return product;
         }
 
         public async Task<string> AddNewProduct(Product prod)
@@ -36,10 +48,13 @@ namespace Managers
             await prodRepo.Commit();
         }
 
-        public async Task UpdateProduct(Product updatedProduct)
+        public async Task UpdateProduct(Product updatedProduct, int managerId)
         {
-            prodRepo.Update(updatedProduct);
-            await prodRepo.Commit();
+            if (updatedProduct.ManagerId == managerId)
+            {
+                prodRepo.Update(updatedProduct);
+                await prodRepo.Commit();
+            }
         }
 
         public List<Product> GetLastProducts(int count)

@@ -69,9 +69,33 @@ namespace Services
             return prodModel;
         }
 
-        public async Task<ProductDetailsModel> GetProduct(int id)
+        public async Task<ProductDetailsModel> GetProductById(int productId)
         {
-            Product prodEntity = await prodManager.GetProductById(id);
+            Product prodEntity = await prodManager.GetProductById(productId);
+
+            if (prodEntity == null)
+            {
+                return null;
+            }
+
+            var prodModel = new ProductDetailsModel
+            {
+                Titile = prodEntity.Name,
+                Description = prodEntity.Details,
+                Price = prodEntity.Price,
+                Image = new Image
+                {
+                    ThumbNailPath = "",
+                    FullSizePath = Path.Combine("\\media\\product", prodEntity.ThumbNail.FullSizePath),
+                }
+            };
+
+            return prodModel;
+        }
+
+        public async Task<ProductDetailsModel> GetProduct(int productId, int managerId)
+        {
+            Product prodEntity = await prodManager.GetProduct(productId, managerId);
 
             if (prodEntity == null)
             {
@@ -119,9 +143,9 @@ namespace Services
             return managerProdModel;
         }
 
-        public async Task<EditProductModel> GetEditProductModel(int id)
+        public async Task<EditProductModel> GetEditProductModel(int productId, int userId)
         {
-            Product prodEntity = await prodManager.GetProductById(id);
+            Product prodEntity = await prodManager.GetProduct(productId, userId);
 
             if (prodEntity == null)
             {
@@ -145,7 +169,7 @@ namespace Services
             return editProdModel;
         }
 
-        public async Task UpdateProduct(EditProductModel updatedProd)
+        public async Task UpdateProduct(EditProductModel updatedProd, int managerId)
         {
             var prodEntity = await prodManager.GetProductById(updatedProd.Id);
 
@@ -175,7 +199,7 @@ namespace Services
                 prodEntity.ThumbNail = currentImageEntity;
             }
 
-            await prodManager.UpdateProduct(prodEntity);
+            await prodManager.UpdateProduct(prodEntity, managerId);
         }
     }
 }
