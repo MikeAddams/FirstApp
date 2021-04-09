@@ -37,6 +37,12 @@ namespace App.Controllers
         {
             EditProductModel prodModel = await prodService.GetEditProductModel(id);
 
+            if (prodModel == null)
+            {
+                Response.StatusCode = 404;
+                return RedirectToAction("NotFound", "Home");
+            }
+
             return View(prodModel);
         }
 

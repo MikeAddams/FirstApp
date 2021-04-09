@@ -39,37 +39,20 @@ namespace Repositories
 
         public async Task<Product> GetById(int id)
         {
-            var joinedData = await Db.Products
-                .Join(
-                    Db.Images,
-                    prod => prod.ThumbNailId,
-                    thumb => thumb.Id,
-                    (prod, thumb) => new
-                    {
-                        Id = prod.Id,
-                        Name = prod.Name,
-                        Details = prod.Details,
-                        Price = prod.Price,
-                        ManagerId = prod.ManagerId,
-                        Thumb = new Image
-                        {
-                            Id = thumb.Id,
-                            ThumbNailPath = thumb.ThumbNailPath,
-                            FullSizePath = thumb.FullSizePath
-                        }
-                    }
-                ).FirstOrDefaultAsync(x => x.Id == id);
+            var product = await Db.Products.FindAsync(id);
 
-            
-            var product = new Product
+            if (product == null)
             {
-                Id = id,
-                Name = joinedData.Name,
-                Details = joinedData.Details,
-                Price = joinedData.Price,
-                ManagerId = joinedData.ManagerId,
-                ThumbNail = joinedData.Thumb
-            };
+                return null;
+            }
+
+            var thumbNail = await Db.Products
+                .Include(x => x.ThumbNail)
+                .Select(x => x.ThumbNail)
+                .Where(x => x.Id == product.ThumbNailId)
+                .FirstAsync();
+
+            product.ThumbNail = thumbNail;
 
             return product;
         }
