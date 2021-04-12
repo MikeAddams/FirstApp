@@ -9,6 +9,23 @@ namespace Managers
 {
     public class FileManager : IFileManager
     {
+        public bool RemoveFile(string fileName)
+        {
+            string fullFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\product", fileName);
+            FileInfo file = new FileInfo(fullFilePath);
+
+            if (file.Exists)
+            {
+                file.Delete();
+            }
+            else
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public string UploadFile(IFormFile file)
         {
             string uniqueFileName = null;

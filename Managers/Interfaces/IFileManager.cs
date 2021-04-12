@@ -8,5 +8,6 @@ namespace Managers.Interfaces
     public interface IFileManager
     {
         public string UploadFile(IFormFile file);
+        public bool RemoveFile(string fileName);
     }
 }

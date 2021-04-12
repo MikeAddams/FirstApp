@@ -184,7 +184,8 @@ namespace Services
                 if (updatedProd.UpdatedThumbNail != null)
                 {
                     string uniqueThumbName = fileManager.UploadFile(updatedProd.UpdatedThumbNail);
-
+                    
+                    fileManager.RemoveFile(currentImageEntity.ThumbNailPath);
                     currentImageEntity.ThumbNailPath = uniqueThumbName;
                 }
 
@@ -192,6 +193,7 @@ namespace Services
                 {
                     string uniqueFullsizeName = fileManager.UploadFile(updatedProd.UpdatedFullSize);
 
+                    fileManager.RemoveFile(currentImageEntity.FullSizePath);
                     currentImageEntity.FullSizePath = uniqueFullsizeName;
                 }
 
