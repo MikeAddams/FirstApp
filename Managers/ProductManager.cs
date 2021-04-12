@@ -44,7 +44,7 @@ namespace Managers
 
         public async Task DeleteProduct(int productId)
         {
-            prodRepo.Delete(productId);
+            await prodRepo.Delete(productId);
             await prodRepo.Commit();
         }
 

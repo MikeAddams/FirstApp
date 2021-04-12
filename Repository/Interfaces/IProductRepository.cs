@@ -11,7 +11,7 @@ namespace Repositories.Interfaces
         public Task<int> Commit();
         public List<Product> GetLast(int count);
         public List<Product> GetProductsByManagerId(int managerId);
-        public void Delete(int productId);
+        public Task Delete(int productId);
         public void Update(Product updatedProduct);
     }
 }

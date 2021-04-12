@@ -29,5 +29,13 @@ namespace Repositories
         {
             return await Db.SaveChangesAsync();
         }
+
+        public void Delete(int imageId)
+        {
+            var img = new Image { Id = imageId };
+
+            var entity = Db.Images.Attach(img);
+            entity.State = EntityState.Deleted;
+        }
     }
 }

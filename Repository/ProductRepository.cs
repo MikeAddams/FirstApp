@@ -24,12 +24,19 @@ namespace Repositories
             return newProduct;
         }
 
-        public void Delete(int productId)
+        public async Task Delete(int productId)
         {
-            var product = new Product { Id = productId };
+            var product = await Db.Products
+                .Include(x => x.ThumbNail)
+                .Where(x => x.Id == productId)
+                .FirstAsync();
 
-            var entity = Db.Products.Attach(product);
-            entity.State = EntityState.Deleted;
+            var thumb = product.ThumbNail;
+
+            Db.Remove(thumb);
+            Db.Remove(product);
+            // Idk why it doesn't delete related records 
+            // .OnDelete(DeleteBehavior.Cascade) - doesn't work
         }
 
         public async Task<int> Commit()
