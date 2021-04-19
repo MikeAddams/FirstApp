@@ -56,8 +56,6 @@ namespace Managers
 
         public async Task UpdateProduct(Product updatedProduct, int managerId)
         {
-            //if (ValidateImage) throw new MyValidationException("asd");
-
             if (updatedProduct.ManagerId != managerId) throw new PermissionException("Updating Product");
 
             prodRepo.Update(updatedProduct);

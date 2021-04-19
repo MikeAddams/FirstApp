@@ -11,5 +11,7 @@ namespace Managers.Interfaces
         public void UploadFile(IFormFile file, string uniqueFileName);
         public bool RemoveFile(string fileName);
         public string GetUniqueFileName(string currentFileName);
+        public string ValidateFile(IFormFile file);
+        public bool ReplaceFile(IFormFile file, string fileName);
     }
 }

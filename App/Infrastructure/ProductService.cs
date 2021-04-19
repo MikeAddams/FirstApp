@@ -28,8 +28,8 @@ namespace Services
         {
             try
             {
-                string uniqueThumbName = fileManager.GetUniqueFileName(prodModel.ThumbNail.FileName);
-                string uniqueFullsizeName = fileManager.GetUniqueFileName(prodModel.FullSize.FileName);
+                string uniqueThumbName = fileManager.ValidateFile(prodModel.ThumbNail);
+                string uniqueFullsizeName = fileManager.ValidateFile(prodModel.FullSize);
 
                 var product = new Product()
                 {
@@ -193,50 +193,39 @@ namespace Services
 
         public async Task<ProductCRUDResultModel> UpdateProduct(EditProductModel updatedProd, int managerId)
         {
-            var prodEntity = await prodManager.GetProductById(updatedProd.Id);
-
-            prodEntity.Name = updatedProd.Title;
-            prodEntity.Details = updatedProd.Description;
-            prodEntity.Price = updatedProd.Price;
-
-
-
-            /*
-            if (updatedProd.UpdatedThumbNail != null || updatedProd.UpdatedFullSize != null)
+            try
             {
-                var currentImageEntity = await imgManager.GetImageById(updatedProd.CurrentImage.Id);
+                var prodEntity = await prodManager.GetProductById(updatedProd.Id);
+
+                prodEntity.Name = updatedProd.Title;
+                prodEntity.Details = updatedProd.Description;
+                prodEntity.Price = updatedProd.Price;
 
                 if (updatedProd.UpdatedThumbNail != null)
                 {
-                    string uniqueThumbName = fileManager.UploadFile(updatedProd.UpdatedThumbNail);
-                    
-                    fileManager.RemoveFile(currentImageEntity.ThumbNailPath);
-                    currentImageEntity.ThumbNailPath = uniqueThumbName;
+                    fileManager.ValidateFile(updatedProd.UpdatedThumbNail);
                 }
-
                 if (updatedProd.UpdatedFullSize != null)
                 {
-                    string uniqueFullsizeName = fileManager.UploadFile(updatedProd.UpdatedFullSize);
-
-                    fileManager.RemoveFile(currentImageEntity.FullSizePath);
-                    currentImageEntity.FullSizePath = uniqueFullsizeName;
+                    fileManager.ValidateFile(updatedProd.UpdatedFullSize);
                 }
 
-                //await imgManager.UpdateImage(currentImageEntity);
-                prodEntity.ThumbNail = currentImageEntity;
-            }
-            */
 
-            try
-            {
                 await prodManager.UpdateProduct(prodEntity, managerId);
+
+                fileManager.ReplaceFile(updatedProd.UpdatedThumbNail, prodEntity.ThumbNail.ThumbNailPath);
+                fileManager.ReplaceFile(updatedProd.UpdatedFullSize, prodEntity.ThumbNail.FullSizePath);
             }
             catch(PermissionException ex)
             {
                 return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
             }
+            catch(Exception ex)
+            {
+                return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
+            }
 
-            return new ProductCRUDResultModel { IsSuccessful = true };
+            return new ProductCRUDResultModel { IsSuccessful = true, Message = "Product updated succesfully!" };
         }
     }
 }

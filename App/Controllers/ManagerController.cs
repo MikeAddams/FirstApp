@@ -63,7 +63,7 @@ namespace App.Controllers
 
             if (productResult.IsSuccessful)
             {
-                TempData["ProductStatus"] = "Product was updated succesfully";
+                TempData["ProductStatus"] = productResult.Message;
                 return RedirectToAction("EditProduct", "Manager");
             }
 

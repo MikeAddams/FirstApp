@@ -21,7 +21,7 @@ namespace Managers
             }
             else
             {
-                return false;
+                throw new InvalidImageException("Old image is missing.");
             }
 
             return true;
@@ -49,8 +49,7 @@ namespace Managers
 
         public void UploadFile(IFormFile file, string uniqueFileName)
         {
-            if (file == null) throw new InvalidImageException("No image found");
-            if (file.Length > 500000) throw new InvalidImageException("Image size is too big");
+            this.ValidateFile(file);
 
             string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\product");
 
@@ -64,6 +63,27 @@ namespace Managers
         public string GetUniqueFileName(string currentFileName)
         {
             return Guid.NewGuid().ToString() + "_" + currentFileName;
+        }
+
+        public string ValidateFile(IFormFile file)
+        {
+            if (file == null) throw new InvalidImageException("No image found");
+            if (file.Length > 500000) throw new InvalidImageException("Image size is too big");
+
+            return this.GetUniqueFileName(file.FileName);
+        }
+
+        public bool ReplaceFile(IFormFile file, string filename)
+        {
+            if (file == null)
+            {
+                return false;
+            }
+
+            this.RemoveFile(filename);
+            this.UploadFile(file, filename);
+
+            return true;
         }
     }
 }
