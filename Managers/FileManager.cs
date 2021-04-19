@@ -1,4 +1,5 @@
-﻿using Managers.Interfaces;
+﻿using Managers.Exceptions;
+using Managers.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -28,20 +29,41 @@ namespace Managers
 
         public string UploadFile(IFormFile file)
         {
+            if (file == null) throw new InvalidImageException("No image found");
+
+            if (file.Length > 500000) throw new InvalidImageException("Image size is too big");
+
             string uniqueFileName = null;
 
-            if (file != null)
+            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\product");
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
-                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\product");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    file.CopyTo(fileStream);
-                }
+                file.CopyTo(fileStream);
             }
 
             return uniqueFileName;
+        }
+
+        public void UploadFile(IFormFile file, string uniqueFileName)
+        {
+            if (file == null) throw new InvalidImageException("No image found");
+            if (file.Length > 500000) throw new InvalidImageException("Image size is too big");
+
+            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\media\\product");
+
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(fileStream);
+            }
+        }
+
+        public string GetUniqueFileName(string currentFileName)
+        {
+            return Guid.NewGuid().ToString() + "_" + currentFileName;
         }
     }
 }

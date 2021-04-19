@@ -9,6 +9,7 @@ namespace Repositories.Interfaces
         public User Update(User updatedUser);
 
         public Task<User> GetByUsername(string username);
+        public Task<User> GetById(int userId);
         public Task<int> GetLastUserId();
 
         public Task<int> Commit();

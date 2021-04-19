@@ -43,6 +43,11 @@ namespace Repositories
             return await Db.Users.MaxAsync(x => x.Id);
         }
 
+        public async Task<User> GetById(int userId)
+        {
+            return await Db.Users.FindAsync(userId);
+        }
+
         public async Task<int> Commit()
         {
             return await Db.SaveChangesAsync();

@@ -1,4 +1,5 @@
 ﻿using Data;
+using Managers.Exceptions;
 using Managers.Interfaces;
 using Repositories.Interfaces;
 using System;
@@ -11,10 +12,12 @@ namespace Managers
     public class ProductManager : IProductManager
     {
         private readonly IProductRepository prodRepo;
+        private readonly IImageRepository imgRepo;
 
-        public ProductManager(IProductRepository _prodRepo)
+        public ProductManager(IProductRepository _prodRepo, IImageRepository _imgRepo)
         {
             prodRepo = _prodRepo;
+            imgRepo = _imgRepo;
         }
 
         public async Task<Product> GetProductById(int productId)
@@ -34,27 +37,31 @@ namespace Managers
             return product;
         }
 
-        public async Task<string> AddNewProduct(Product prod)
+        public async Task AddNewProduct(Product prod, RoleType role)
         {
+            if (role == RoleType.Client) throw new PermissionException("Adding Product");
+
             await prodRepo.Add(prod);
             await prodRepo.Commit();
-
-            return ""; //
         }
 
         public async Task DeleteProduct(int productId)
         {
+            //var prodDetails = await prodRepo.GetById(productId);
+            //var a = prodDetails.
+
             await prodRepo.Delete(productId);
             await prodRepo.Commit();
         }
 
         public async Task UpdateProduct(Product updatedProduct, int managerId)
         {
-            if (updatedProduct.ManagerId == managerId)
-            {
-                prodRepo.Update(updatedProduct);
-                await prodRepo.Commit();
-            }
+            //if (ValidateImage) throw new MyValidationException("asd");
+
+            if (updatedProduct.ManagerId != managerId) throw new PermissionException("Updating Product");
+
+            prodRepo.Update(updatedProduct);
+            await prodRepo.Commit();
         }
 
         public List<Product> GetLastProducts(int count)

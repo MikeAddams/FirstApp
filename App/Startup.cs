@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using App.Infrastructure.Interfaces;
 using App.Infrastructure;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace App
 {
@@ -70,10 +71,31 @@ namespace App
             }
             else
             {
+                /*
+                app.UseExceptionHandler(app =>
+                {
+                    app.Run(async context =>
+                    {
+                        var exceptionHandlerPathFeature =
+                            context.Features.Get<IExceptionHandlerPathFeature>();
+
+                        if (exceptionHandlerPathFeature?.Error is PermissionExceptions)
+                        {
+                            app.UseExceptionHandler("/error/nopermission");
+                        }
+                        else
+                        {
+                            app.UseExceptionHandler("/error/crash");
+                        }
+                    });
+                });
+                */
+
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

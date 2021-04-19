@@ -1,5 +1,6 @@
 ﻿using Data;
 using Managers.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Repositories.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -25,5 +26,12 @@ namespace Managers
             imgRepo.Update(updatedImage);
             await imgRepo.Commit();
         }
+
+        //public Image UpdateThumbnail(IFormFile UpdatedThumbnail, IFormFile UpdatedFullsize)
+       // {
+            //if ()
+        //}
+
+
     }
 }

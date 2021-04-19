@@ -1,91 +1,100 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
 }
 
 @model App.Models.AddProductModel
 
-<form asp-controller="Manager" asp-action="AddProduct" 
-      class="form-horizontal" enctype="multipart/form-data">
-    <fieldset>
+<form asp-controller="Manager" asp-action="SaveNewProduct"
+      class="form-horizontal mt-4" enctype="multipart/form-data">
+    <fieldset class="row">
 
-        <div class="form-group">
-            <label class="col-md-4 control-label">PRODUCT NAME</label>
-            <div class="col-md-4">
-                <input asp-for="Name" type="text" 
-                       placeholder="PRODUCT NAME" class="form-control input-md" required>
-                <span asp-validation-for="Name"></span>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-md-4 control-label">PRODUCT PRICE</label>
-            <div class="col-md-4">
-                <input asp-for="Price" type="number"
-                       placeholder="PRODUCT PRICE" class="form-control input-md" required>
-                <span asp-validation-for="Price"></span>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-md-4 control-label">PRODUCT DESCRIPTION</label>
-            <div class="col-md-4">
-                <textarea asp-for="Description" type="text"
-                          class="form-control" required></textarea>
-                <span asp-validation-for="Description"></span>
-            </div>
-        </div>
-
-        <!-- Select Basic
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="product_categorie">PRODUCT CATEGORY</label>
-            <div class="col-md-4">
-                <select id="product_categorie" name="product_categorie" class="form-control">
-                </select>
-            </div>
-        </div>
-        -->
-
-        <div class="form-group">
-            <div class="col-md-5">
-
-                <div class="form-group d-block">
-                    <label class="col-md-4 control-label">Thumb image</label>
-                    <div class="col-md-4">
-                        <input asp-for="ThumbNail" type="file"
-                               class="input-file" required>
-                    </div>
+        <div class="col-md-5">
+            <div class="form-group">
+                <label class="col-md-10 control-label">PRODUCT NAME</label>
+                <div class="col-md-10">
+                    <input asp-for="Name" type="text"
+                           placeholder="PRODUCT NAME" class="form-control input-md" required>
+                    <span asp-validation-for="Name"></span>
                 </div>
+            </div>
 
-                <div class="form-group d-block">
-                    <label class="col-md-4 control-label">Full size image</label>
-                    <div class="col-md-4">
-                        <input asp-for="FullSize" type="file"
-                               class="input-file" required>
-                    </div>
+            <div class="form-group mt-4">
+                <label class="col-md-10 control-label">PRODUCT PRICE</label>
+                <div class="col-md-10">
+                    <input asp-for="Price" type="number"
+                           placeholder="PRODUCT PRICE" class="form-control input-md" required>
+                    <span asp-validation-for="Price"></span>
                 </div>
+            </div>
 
-                <!--
+            <div class="form-group mt-4">
+                <label class="col-md-10 control-label">PRODUCT DESCRIPTION</label>
+                <div class="col-md-10">
+                    <textarea asp-for="Description" type="text"
+                              class="form-control" style="height: 100px;" required></textarea>
+                    <span asp-validation-for="Description"></span>
+                </div>
+            </div>
+
+            <!-- Select Basic
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="product_categorie">PRODUCT CATEGORY</label>
+                <div class="col-md-4">
+                    <select id="product_categorie" name="product_categorie" class="form-control">
+                    </select>
+                </div>
+            </div>
+            -->
+        </div>
+
+        <div class="form-group col-md-5">
+            <div class="form-group d-block">
+                <label class="col-md-4 control-label">Thumb image</label>
+                <div class="col-md-4">
+                    <input asp-for="ThumbNail" type="file"
+                           class="input-file" required>
+                </div>
+            </div>
+
+            <div class="form-group d-block mt-4">
+                <label class="col-md-4 control-label">Full size image</label>
+                <div class="col-md-4">
+                    <input asp-for="FullSize" type="file"
+                           class="input-file" required>
+                </div>
+            </div>
+
+            <!--
                 <div class="form-group d-block">
                     <label class="col-md-4 control-label">Auxiliary images</label>
                     <div class="col-md-4">
                         <input class="input-file" type="file">
                     </div>
                 </div>
-                -->
-
-                <!-- Button -->
-                <div class="form-group d-block mt-4">
-                    <div class="col-md-4">
-                        <button type="submit"
-                                class="btn btn-primary btn-block">
-                            Save
-                        </button>
-                    </div>
-                </div>
-            </div>
+            -->
+            <!-- Button -->
         </div>
-
     </fieldset>
+
+    <div class="row mt-3 flex-lg-row-reverse">
+        <div class="col-md-1">
+            <button type="submit"
+                    class="btn btn-primary btn-block col">
+                Save
+            </button>
+        </div>
+        <div class="col-md-1">
+            <a asp-controller="Manager" asp-action="Exit"
+               class="btn btn-danger btn-block col">
+                Exit
+            </a>
+        </div>
+    </div>
+
 </form>
+
+@if (@TempData["ProductStatus"] != null)
+{
+    <div class="alert alert-secondary mt-4">
+        @TempData["ProductStatus"]
+    </div>
+}

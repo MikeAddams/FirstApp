@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Data;
 using System.IO;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+using Managers.Exceptions;
+using System;
 
 namespace Services
 {
@@ -12,41 +15,84 @@ namespace Services
     {
         private readonly IProductManager prodManager;
         private readonly IFileManager fileManager;
-        private readonly IImageManager imgManager;
+        private readonly IUserManager userManager;
 
-        public ProductService(IProductManager _prodManager, IFileManager _fileManager, IImageManager _imgManager)
+        public ProductService(IProductManager _prodManager, IFileManager _fileManager, IUserManager _userManager)
         {
             prodManager = _prodManager;
             fileManager = _fileManager;
-            imgManager = _imgManager;
+            userManager = _userManager;
         }
 
-        public async Task<bool> AddProduct(AddProductModel prodModel, int managerId)
+        public async Task<ProductCRUDResultModel> AddProduct(AddProductModel prodModel, int managerId)
         {
-            string uniqueThumbName = fileManager.UploadFile(prodModel.ThumbNail);
-            string uniqueFullsizeName = fileManager.UploadFile(prodModel.FullSize);
-
-            var product = new Product()
+            /*
+            if(true) // file size
             {
-                Name = prodModel.Name,
-                Details = prodModel.Description,
-                Price = prodModel.Price,
-                ThumbNail = new Image
+                return new AddProductResultModel { IsSuccessful = false, ErroMessage = "The image is too big"}''
+            }
+
+            if (true) //  image is invalid
+            {
+                return new AddProductResultModel { IsSuccessful = false, ErroMessage = "Image Is Invalid" };
+            }
+
+            try
+            {
+                // process image
+                // update producct
+                return new AddProductResultModel { IsSuccessful = true };
+            }
+            catch(MyValidationException ex)
+            {
+                return new AddProductResultModel { IsSuccessful = false, ErroMessage = ex.Message };
+            }
+            */
+
+  
+            try
+            {
+                string uniqueThumbName = fileManager.GetUniqueFileName(prodModel.ThumbNail.FileName);
+                string uniqueFullsizeName = fileManager.GetUniqueFileName(prodModel.FullSize.FileName);
+
+                var product = new Product()
                 {
-                    ThumbNailPath = uniqueThumbName,
-                    FullSizePath = uniqueFullsizeName
-                },
-                ManagerId = managerId
-            };
+                    Name = prodModel.Name,
+                    Details = prodModel.Description,
+                    Price = prodModel.Price,
+                    ThumbNail = new Image
+                    {
+                        ThumbNailPath = uniqueThumbName,
+                        FullSizePath = uniqueFullsizeName
+                    },
+                    ManagerId = managerId
+                };
 
-            await prodManager.AddNewProduct(product);
+                var user = await userManager.GetByUserId(managerId);
 
-            return true;
+                await prodManager.AddNewProduct(product, user.Role);
+
+                fileManager.UploadFile(prodModel.ThumbNail, uniqueThumbName);
+                fileManager.UploadFile(prodModel.FullSize, uniqueFullsizeName);
+            }
+            catch (InvalidImageException ex)
+            {
+                return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
+            }
+
+            return new ProductCRUDResultModel { IsSuccessful = true, Message = "Product saved succesfully!" };
         }
 
         public async Task DeleteProduct(int productId)
         {
             await prodManager.DeleteProduct(productId);
+
+            //fileManager.RemoveFile(prodDetails.ThumbNail.ThumbNailPath);
+            //fileManager.RemoveFile(prodDetails.ThumbNail.FullSizePath);
         }
 
         public List<ProductShowcaseModel> GetLastProducts(int count)
@@ -169,7 +215,7 @@ namespace Services
             return editProdModel;
         }
 
-        public async Task UpdateProduct(EditProductModel updatedProd, int managerId)
+        public async Task<ProductCRUDResultModel> UpdateProduct(EditProductModel updatedProd, int managerId)
         {
             var prodEntity = await prodManager.GetProductById(updatedProd.Id);
 
@@ -177,6 +223,9 @@ namespace Services
             prodEntity.Details = updatedProd.Description;
             prodEntity.Price = updatedProd.Price;
 
+
+
+            /*
             if (updatedProd.UpdatedThumbNail != null || updatedProd.UpdatedFullSize != null)
             {
                 var currentImageEntity = await imgManager.GetImageById(updatedProd.CurrentImage.Id);
@@ -200,8 +249,18 @@ namespace Services
                 //await imgManager.UpdateImage(currentImageEntity);
                 prodEntity.ThumbNail = currentImageEntity;
             }
+            */
 
-            await prodManager.UpdateProduct(prodEntity, managerId);
+            try
+            {
+                await prodManager.UpdateProduct(prodEntity, managerId);
+            }
+            catch(PermissionException ex)
+            {
+                return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
+            }
+
+            return new ProductCRUDResultModel { IsSuccessful = true };
         }
     }
 }

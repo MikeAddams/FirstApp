@@ -7,5 +7,6 @@ namespace Managers.Interfaces
     {
         public Task<Image> GetImageById(int id);
         public Task UpdateImage(Image updatedImage);
+
     }
 }

@@ -9,7 +9,7 @@ namespace Managers.Interfaces
     public interface IProductManager
     {
         public List<Product> GetLastProducts(int count);
-        public Task<string> AddNewProduct(Product prod);
+        public Task AddNewProduct(Product prod, RoleType role);
         public List<Product> GetProductsByManagerId(int managerId);
         public Task DeleteProduct(int productId);
         public Task UpdateProduct(Product updatedProduct, int managerId);

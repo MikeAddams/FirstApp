@@ -25,6 +25,11 @@ namespace Managers
             return await userRepo.GetByUsername(username);
         }
 
+        public async Task<User> GetByUserId(int userId)
+        {
+            return await userRepo.GetById(userId);
+        }
+
         public async Task<User> CheckUserCredentials(User passedUser)
         {
             var user = await userRepo.GetByUsername(passedUser.Username);
