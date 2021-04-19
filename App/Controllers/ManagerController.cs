@@ -80,19 +80,6 @@ namespace App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct(AddProductModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                int managerId = int.Parse(User.FindFirstValue("Id"));
-
-                await prodService.AddProduct(model, managerId);
-            }
-
-            return RedirectToAction("AddProduct", "Manager");
-        }
-
-        [HttpPost]
         public async Task<IActionResult> SaveNewProduct(AddProductModel model)
         {
             if (!ModelState.IsValid)
@@ -134,38 +121,3 @@ namespace App.Controllers
 
     }
 }
-
-
-/*
-        [HttpPost]
-        public async Task<IActionResult> AddProduct(AddProductModel model)
-        {
-            return Execute(() =>
-            {
-                int managerId = int.Parse(User.FindFirstValue("Id"));
-
-                await prodService.AddProduct(model, managerId);
-            }, RedirectToAction("AddProduct", "Manager"), RedirectToAction("AddProduct", "Manager"));
-
-            if (ModelState.IsValid)
-            {
-                
-            }
-
-            return RedirectToAction("AddProduct", "Manager");
-        } 
-         
-
-        public ActionResult Execute(Action action, ActionResult success, ActionResult error)
-        {
-            if (ModelState.IsValid)
-            {
-                action();
-
-                
-                return success;
-            }
-
-            return error;
-        }
-        */

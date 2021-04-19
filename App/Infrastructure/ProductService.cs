@@ -26,30 +26,6 @@ namespace Services
 
         public async Task<ProductCRUDResultModel> AddProduct(AddProductModel prodModel, int managerId)
         {
-            /*
-            if(true) // file size
-            {
-                return new AddProductResultModel { IsSuccessful = false, ErroMessage = "The image is too big"}''
-            }
-
-            if (true) //  image is invalid
-            {
-                return new AddProductResultModel { IsSuccessful = false, ErroMessage = "Image Is Invalid" };
-            }
-
-            try
-            {
-                // process image
-                // update producct
-                return new AddProductResultModel { IsSuccessful = true };
-            }
-            catch(MyValidationException ex)
-            {
-                return new AddProductResultModel { IsSuccessful = false, ErroMessage = ex.Message };
-            }
-            */
-
-  
             try
             {
                 string uniqueThumbName = fileManager.GetUniqueFileName(prodModel.ThumbNail.FileName);
