@@ -61,12 +61,6 @@ namespace App.Controllers
             var userId = int.Parse(User.FindFirstValue("Id"));
             var productResult =await prodService.UpdateProduct(updatedModel, userId);
 
-            if (productResult.IsSuccessful)
-            {
-                TempData["ProductStatus"] = productResult.Message;
-                return RedirectToAction("EditProduct", "Manager");
-            }
-
             TempData["ProductStatus"] = productResult.Message;
             return RedirectToAction("EditProduct", "Manager");
         }
@@ -91,12 +85,6 @@ namespace App.Controllers
             int managerId = int.Parse(User.FindFirstValue("Id"));
             var productResult = await prodService.AddProduct(model, managerId);
 
-            if (!productResult.IsSuccessful)
-            {
-                TempData["ProductStatus"] = productResult.Message;
-                return RedirectToAction("AddProduct");
-            }
-
             TempData["ProductStatus"] = productResult.Message;
             return RedirectToAction("AddProduct");
         }
@@ -113,9 +101,9 @@ namespace App.Controllers
         public async Task<IActionResult> DeleteProduct(ManagerProductsModel manProdModel)
         {
             var productId = manProdModel.DeleteProductId;
+            var productResult = await prodService.DeleteProduct(productId);
 
-            await prodService.DeleteProduct(productId);
-
+            TempData["ProductStatus"] = productResult.Message;
             return RedirectToAction("MyProducts", "Manager");
         }
 

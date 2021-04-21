@@ -19,9 +19,21 @@ namespace Managers
             {
                 file.Delete();
             }
+            /*
             else
             {
                 throw new InvalidImageException("Old image is missing.");
+            }
+            */
+
+            return true;
+        }
+
+        public bool RemoveFiles(List<string> fileNames)
+        {
+            foreach (var item in fileNames)
+            {
+                this.RemoveFile(item);
             }
 
             return true;

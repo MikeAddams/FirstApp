@@ -10,6 +10,7 @@ namespace Managers.Interfaces
         public string UploadFile(IFormFile file);
         public void UploadFile(IFormFile file, string uniqueFileName);
         public bool RemoveFile(string fileName);
+        public bool RemoveFiles(List<string> fileNames);
         public string GetUniqueFileName(string currentFileName);
         public string ValidateFile(IFormFile file);
         public bool ReplaceFile(IFormFile file, string fileName);

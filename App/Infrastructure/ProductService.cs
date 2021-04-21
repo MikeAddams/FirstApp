@@ -55,20 +55,30 @@ namespace Services
             {
                 return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
             }
-            catch (Exception ex)
-            {
-                return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
-            }
 
             return new ProductCRUDResultModel { IsSuccessful = true, Message = "Product saved succesfully!" };
         }
 
-        public async Task DeleteProduct(int productId)
+        public async Task<ProductCRUDResultModel> DeleteProduct(int productId)
         {
-            await prodManager.DeleteProduct(productId);
+            try
+            {
+                var prodDetails = await prodManager.GetProductById(productId);
 
-            //fileManager.RemoveFile(prodDetails.ThumbNail.ThumbNailPath);
-            //fileManager.RemoveFile(prodDetails.ThumbNail.FullSizePath);
+                var fileNames = new List<string>();
+                fileNames.Add(prodDetails.ThumbNail.ThumbNailPath);
+                fileNames.Add(prodDetails.ThumbNail.FullSizePath);
+
+                await prodManager.DeleteProduct(productId);
+
+                fileManager.RemoveFiles(fileNames);
+            }
+            catch (InvalidImageException ex)
+            {
+                return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
+            }
+
+            return new ProductCRUDResultModel { IsSuccessful = true, Message = "Product removed successfully" };
         }
 
         public List<ProductShowcaseModel> GetLastProducts(int count)
@@ -217,10 +227,6 @@ namespace Services
                 fileManager.ReplaceFile(updatedProd.UpdatedFullSize, prodEntity.ThumbNail.FullSizePath);
             }
             catch(PermissionException ex)
-            {
-                return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
-            }
-            catch(Exception ex)
             {
                 return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
             }
