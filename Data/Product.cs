@@ -15,5 +15,7 @@ namespace Data
         public Image ThumbNail { get; set; }
 
         public int ManagerId { get; set; }
+
+        public Category Category { get; set; }
     }
 }
