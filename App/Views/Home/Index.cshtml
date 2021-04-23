@@ -3,7 +3,17 @@
     Layout = "~/Views/Shared/_ShopCatalogLayout.cshtml";
 }
 
-@model List<ProductShowcaseModel>
+@model HomeCatalogModel
+
+<div class="col-lg-3">
+    <h1 class="my-4 h3">Search Bar someday</h1>
+    <div class="list-group">
+        @foreach (var item in Model.Categories)
+        {
+            <a href="#" class="list-group-item">@item.Name</a>
+        }
+    </div>
+</div>
 
 <div class="col-lg-9">
 
@@ -41,7 +51,7 @@
         <!-- <img src="~/media/product/concaver-cvr2-wheels-20x9-et45-5x112-carbon-graphite.jpg" /> -->
 
 
-        @foreach (var item in Model)
+        @foreach (var item in Model.Products)
         {
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card h-90" style="height: 100%;">

@@ -38,16 +38,19 @@ namespace App
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IManagerService, ManagerService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IManagerRoleManger, ManagerRoleManager>();
             services.AddScoped<IProductManager, ProductManager>();
             services.AddScoped<IFileManager, FileManager>();
             services.AddScoped<IImageManager, ImageManager>();
+            services.AddScoped<ICategoryManager, CategoryManager>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
