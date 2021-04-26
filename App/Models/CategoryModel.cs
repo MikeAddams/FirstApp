@@ -13,13 +13,3 @@ namespace App.Models
         public virtual List<CategoryModel> Children { get; set; }
     }
 }
-
-/*
- *public int Id { get; set; }
-        public string Name { get; set; }
-
-        public int? ParentId { get; set; }
-        public virtual Category Parent { get; set; }
-
-        public virtual ICollection<Category> Children { get; set; } 
- * */
