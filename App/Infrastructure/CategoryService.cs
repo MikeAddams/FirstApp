@@ -22,12 +22,26 @@ namespace App.Infrastructure
             var categoryEntities = catManager.GetAll();
             var categoryModels = new List<CategoryModel>();
 
-            foreach (var category in categoryEntities)
+            var Parents = categoryEntities.Where(x => x.Parent == null);
+            var Children = categoryEntities.Where(x => x.Parent != null);
+
+            var childrenList = new List<CategoryModel>();
+
+            foreach (var child in Children)
+            {
+                childrenList.Add(new CategoryModel
+                {
+                    ParentId = child.ParentId,
+                    Name = child.Name
+                });
+            }
+
+            foreach (var parent in Parents)
             {
                 categoryModels.Add(new CategoryModel
                 {
-                    Name = category.Name,
-                    ParentId = category.ParentId
+                    Name = parent.Name,
+                    Children = childrenList.Where(x => x.ParentId == parent.Id).ToList()
                 });
             }
 
