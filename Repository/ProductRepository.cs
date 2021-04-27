@@ -140,5 +140,23 @@ namespace Repositories
             Db.Products.Update(updatedProduct);
         }
 
+        public List<Product> GetByCategoryId(int categoryId)
+        {
+            var products = Db.Products.Where(p => p.Category.Id == categoryId).ToList();
+
+            return products;
+        }
+
+        public List<Product> GetByCategoriesId(List<int> catIds)
+        {
+            //var products = Db.Products.Where(p => catIds.Contains(p.Category.Id)).ToList();
+            var products = Db.Products
+                .Include(p => p.ThumbNail)
+                .Where(p => catIds.Contains(p.Category.Id))
+                .ToList();
+
+            return products;
+        }
+
     }
 }

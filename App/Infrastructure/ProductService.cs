@@ -233,5 +233,30 @@ namespace Services
 
             return new ProductCRUDResultModel { IsSuccessful = true, Message = "Product updated succesfully!" };
         }
+
+        public List<ProductShowcaseModel> GetProductsByCategoriesId(List<int> catIds)
+        {
+            var productsEntity = prodManager.GetProductsByCategoriesId(catIds);
+
+            if (productsEntity == null || productsEntity.Count == 0)
+            {
+                return null;
+            }
+
+            var productsModel = new List<ProductShowcaseModel>();
+
+            foreach (var prod in productsEntity)
+            {
+                productsModel.Add(new ProductShowcaseModel
+                {
+                    Id = prod.Id,
+                    Title = prod.Name,
+                    Price = prod.Price,
+                    ThumbNailPath = Path.Combine("\\media\\product", prod.ThumbNail.ThumbNailPath)
+                });
+            }
+
+            return productsModel;
+        }
     }
 }

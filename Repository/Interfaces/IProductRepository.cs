@@ -13,5 +13,7 @@ namespace Repositories.Interfaces
         public List<Product> GetProductsByManagerId(int managerId);
         public Task Delete(int productId);
         public void Update(Product updatedProduct);
+        public List<Product> GetByCategoryId(int categoryId);
+        public List<Product> GetByCategoriesId(List<int> catIds);
     }
 }

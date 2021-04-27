@@ -1,5 +1,6 @@
 ﻿using App.Infrastructure.Interfaces;
 using App.Models;
+using Data;
 using Managers.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,53 @@ namespace App.Infrastructure
             }
 
             return categoryModels;
+        }
+
+        public int? GetCategoryId(string categoryName)
+        {
+            int? categoryId;
+
+            try
+            {
+                var categoryEntity = catManager.GetByName(categoryName);
+                categoryId = categoryEntity.Id;
+            }
+            catch (NullReferenceException)
+            {
+                categoryId = null;
+            }
+
+            return categoryId;
+        }
+
+        public List<CategoryModel> GetAllRelatedCategories(int parentId)
+        {
+            var categoriesEntity = catManager.GetAllRelated(parentId);
+            var categroiesModel = new List<CategoryModel>();
+
+            foreach (var cat in categoriesEntity)
+            {
+                categroiesModel.Add(new CategoryModel
+                {
+                    Id = cat.Id,
+                    Name = cat.Name
+                });
+            }
+
+            return categroiesModel;
+        }
+
+        public List<int> GetAllRelatedCategoriesIds(int parentId)
+        {
+            var categories = this.GetAllRelatedCategories(parentId);
+            var ids = new List<int>();
+
+            foreach (var cat in categories)
+            {
+                ids.Add(cat.Id);
+            }
+
+            return ids;
         }
     }
 }

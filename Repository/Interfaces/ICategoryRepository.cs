@@ -8,5 +8,7 @@ namespace Repositories.Interfaces
     public interface ICategoryRepository
     {
         public List<Category> GetAllCategories();
+        public Category GetCategoryByName(string categoryName);
+        public List<Category> GetSubCategories(int parentId);
     }
 }

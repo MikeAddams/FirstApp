@@ -112,7 +112,17 @@ namespace App
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                
+
+                endpoints.MapControllerRoute(
+                    name: "notFound",
+                    pattern: "NotFoundPage",
+                    defaults: new { controller = "Home", action = "NotFoundPage" }
+                );
+
+                endpoints.MapControllerRoute(
+                    name: "category",
+                    pattern: "{category}/{subCategory?}",
+                    defaults: new { controller = "Home", action = "CategoryProducts" });
             });
         }
     }

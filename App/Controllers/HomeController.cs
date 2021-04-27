@@ -2,6 +2,7 @@
 using App.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace App.Controllers
@@ -32,9 +33,36 @@ namespace App.Controllers
             return View(homeModel);
         }
 
-        public IActionResult NotFound()
+        public IActionResult NotFoundPage()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult CategoryProducts(string category, string subCategory)
+        {
+            var categoryId = catService.GetCategoryId(category);
+
+            if (categoryId == null)
+            {
+                return RedirectToAction("NotFoundPage");
+            }
+
+            var subCategoryId = catService.GetCategoryId(subCategory);
+            var categoriesId = new List<int>();
+
+            if (subCategoryId != null)
+            {
+
+            }
+            else
+            {
+                categoriesId = catService.GetAllRelatedCategoriesIds((int)categoryId);
+            }
+
+            var productsModel = prodService.GetProductsByCategoriesId(categoriesId);
+
+            return View(productsModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

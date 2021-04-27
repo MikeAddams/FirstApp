@@ -72,5 +72,15 @@ namespace Managers
             return prodRepo.GetProductsByManagerId(managerId);
         }
 
+        public List<Product> GetProductsByCategoryId(int categoryId)
+        {
+            return prodRepo.GetByCategoryId(categoryId);
+        }
+
+        public List<Product> GetProductsByCategoriesId(List<int> catIds)
+        {
+            return prodRepo.GetByCategoriesId(catIds);
+        }
+
     }
 }

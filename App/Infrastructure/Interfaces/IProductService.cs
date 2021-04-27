@@ -14,5 +14,6 @@ namespace Services.Interfaces
         public Task<ProductCRUDResultModel> DeleteProduct(int productId);
         public Task<EditProductModel> GetEditProductModel(int productId, int userId);
         public Task<ProductCRUDResultModel> UpdateProduct(EditProductModel updatedProd, int managerId);
+        public List<ProductShowcaseModel> GetProductsByCategoriesId(List<int> catIds);
     }
 }

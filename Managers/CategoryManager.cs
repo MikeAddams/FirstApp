@@ -20,5 +20,27 @@ namespace Managers
         {
             return catRepo.GetAllCategories();
         }
+
+        public Category GetByName(string categoryName)
+        {
+            var category = catRepo.GetCategoryByName(categoryName);
+
+            if (category == null) new NullReferenceException();
+
+            return category;
+        }
+
+        public List<Category> GetAllRelated(int parentId)
+        {
+            var children = catRepo.GetSubCategories(parentId);
+            var categories = new List<Category>();
+
+            foreach (var child in children)
+            {
+                categories.Add(child);
+            }
+
+            return categories;
+        }
     }
 }
