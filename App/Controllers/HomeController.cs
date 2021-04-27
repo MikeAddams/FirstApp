@@ -49,20 +49,24 @@ namespace App.Controllers
             }
 
             var subCategoryId = catService.GetCategoryId(subCategory);
+            var homeCatalogModel = new CategoryProductsModel();
             var categoriesId = new List<int>();
 
             if (subCategoryId != null)
             {
-
+                categoriesId.Add((int)subCategoryId);
+                homeCatalogModel.CurrentCategory = subCategory;
             }
             else
             {
                 categoriesId = catService.GetAllRelatedCategoriesIds((int)categoryId);
+                homeCatalogModel.CurrentCategory = category;
             }
 
-            var productsModel = prodService.GetProductsByCategoriesId(categoriesId);
+            homeCatalogModel.Products = prodService.GetProductsByCategoriesId(categoriesId);
+            homeCatalogModel.Categories = catService.GetAllCategoryModels();
 
-            return View(productsModel);
+            return View(homeCatalogModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
