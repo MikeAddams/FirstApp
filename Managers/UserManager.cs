@@ -1,4 +1,5 @@
 ﻿using Data;
+using Managers.Exceptions;
 using Managers.Interfaces;
 using Repositories;
 using Repositories.Interfaces;
@@ -22,6 +23,12 @@ namespace Managers
 
         public async Task<User> GetByUsername(string username)
         {
+            if (username == null || username.Length == 0)
+                throw new InvalidUsernameException("empty");
+
+            if (username.Length > 25 || username.Length < 3)
+                throw new InvalidUsernameException("length does not correspond");
+
             return await userRepo.GetByUsername(username);
         }
 
