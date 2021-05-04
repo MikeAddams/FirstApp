@@ -42,16 +42,12 @@ namespace Managers
             var user = await userRepo.GetByUsername(passedUser.Username);
 
             if (user == null)
-            {
-                return null;
-            }
+                throw new InvalidUserException("incorrect user credentials");
 
             var hashedPassword = HashPassword(passedUser.Password);
 
             if (user.Password != hashedPassword)
-            {
-                return null;
-            }
+                throw new InvalidUserException("incorrect user credentials");
 
             return user;
         }
