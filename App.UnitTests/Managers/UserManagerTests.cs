@@ -121,5 +121,101 @@ namespace App.UnitTests.Managers
             // Assert
             Assert.Equal(expectedUser, result);
         }
+
+        [Fact]
+        public async Task RegisterUser_CallsCheckIfUsernameAvaibleOnce_If_IsUsernameAvaibleEqualNull()
+        {
+            // Arrange
+            //var userRepoMock = new Mock<IUserRepository>();
+            //var userManagerMock = new Mock<UserManager>(userRepoMock);
+            //userManagerMock.Object.IsUsernameAvaible = false;
+            //var a = userManagerMock.Object;
+           // a.IsUsernameAvaible = false;
+
+            // Act
+            //await userManagerMock.Object.RegisterUser(It.IsAny<User>());
+            //userManagerMock.Setup(x => x.CheckIfUsernameAvaible(It.IsAny<string>()))
+            //.ReturnsAsync(false);
+            
+
+            // Assert
+            //userManagerMock.Verify(async() => x.RegisterUser(It.IsAny<User>()), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RegisterUser_ReturnsUserIdIfUsernameIsAvaible_Else_ThrowsInvalidUserException(bool _isUsernameAvaibale)
+        {
+            // Arrange
+            var userRepoMock = new Mock<IUserRepository>();
+            int expectedUserId = 5;
+            var passedUser = new User
+            {
+                FirstName = "ValidFN",
+                LastName = "ValidLN",
+                Nickname = "ValidNKM",
+                Email = "valid@mail.com",
+                Password = "validPass"
+            };
+
+            userRepoMock.Setup(x => x.GetLastUserId())
+                .ReturnsAsync(expectedUserId);
+
+            var userManager = new UserManager(userRepoMock.Object)
+            {
+                IsUsernameAvaible = _isUsernameAvaibale
+            };
+
+            // Act & Assert
+            if (_isUsernameAvaibale)
+            {
+                var result = await userManager.RegisterUser(passedUser);
+                Assert.Equal(result, expectedUserId);
+            }
+            else
+            {
+                await Assert.ThrowsAsync<InvalidUserException>(
+                    async () => await userManager.RegisterUser(passedUser));
+            }
+        }
+
+        [Theory]
+        [InlineData("iii", "iii", "iii", "iii")]
+        [InlineData("ValidFN", "iii", "iii", "iii")]
+        [InlineData("ValidFN", "ValidLN", "iii", "iii")]
+        [InlineData("ValidFN", "ValidLN", "ValidNKM", "ii")]
+        [InlineData("invalidFirstNameMoreThan25", "ValidLN", "ValidNKM", "valid@mail.com")]
+        [InlineData("ValidFN", "invalidLastNameMoreThan25Char", "ValidNKM", "valid@mail.com")]
+        [InlineData("ValidFN", "ValidLN", "invalidNickNameMoreThan25", "valid@mail.com")]
+        [InlineData("ValidFN", "ValidLN", "ValidNKM", "invalidEmail")]
+        public async Task RegisterUser_ThrowsInvalidUserException_If_DoesNotPassValidation(
+            string _firstName, string _lastName, string _nickname, string _email)
+        {
+            // Arrange
+            var userRepoMock = new Mock<IUserRepository>();
+            int expectedUserId = 5;
+
+            var passedUser = new User
+            {
+                FirstName = _firstName,
+                LastName = _lastName,
+                Nickname = _nickname,
+                Email = _email,
+                Password = "validPass"
+            };
+
+            userRepoMock.Setup(x => x.GetLastUserId())
+                .ReturnsAsync(expectedUserId);
+
+            var userManager = new UserManager(userRepoMock.Object)
+            {
+                IsUsernameAvaible = true
+            };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidUserException>(
+                    async () => await userManager.RegisterUser(passedUser));
+        }
     }
 }

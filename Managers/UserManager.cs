@@ -14,7 +14,7 @@ namespace Managers
     {
         private readonly IUserRepository userRepo;
 
-        public bool IsUsernameAvaible = false;
+        public bool ?IsUsernameAvaible = null;
 
         public UserManager(IUserRepository _userRepo)
         {
@@ -54,10 +54,25 @@ namespace Managers
 
         public async Task<int> RegisterUser(User user)
         {
-            if (!IsUsernameAvaible)
+            if (IsUsernameAvaible == null)
             {
-                return 0;
+                IsUsernameAvaible = await CheckIfUsernameAvaible(user.Username);
             }
+
+            if (IsUsernameAvaible == false)
+                throw new InvalidUserException("Username already in use");
+
+            if (user.FirstName.Length < 4 || user.FirstName.Length > 25)
+                throw new InvalidUserException("First Name lenght does not correpsond");
+
+            if (user.LastName.Length < 4 || user.LastName.Length > 25)
+                throw new InvalidUserException("Last Name lenght does not correpsond");
+
+            if (user.Nickname.Length < 3 || user.Nickname.Length > 20)
+                throw new InvalidUserException("Nickname lenght does not correpsond");
+
+            if (IsValidEmail(user.Email) == false)
+                throw new InvalidUserException("Invalid user email");
 
             var hashedPassword = HashPassword(user.Password);
             user.Password = hashedPassword;
@@ -95,6 +110,19 @@ namespace Managers
             using (var hashAlgorithm = HashAlgorithm.Create(algorithm))
             {
                 return Convert.ToBase64String(hashAlgorithm.ComputeHash(input));
+            }
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
             }
         }
     }
