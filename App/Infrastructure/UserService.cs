@@ -1,6 +1,7 @@
 ﻿using App.Infrastructure.Interfaces;
 using App.Models;
 using Data;
+using Managers.Exceptions;
 using Managers.Interfaces;
 using Repositories.Interfaces;
 using System;
@@ -76,21 +77,24 @@ namespace App.Infrastructure
                 Password = userLoginModel.Password
             };
 
-            var user = await userManager.CheckUserCredentials(userEntity);
-
-            if (user == null)
+            try
             {
-                return null;
+                var user = await userManager.CheckUserCredentials(userEntity);
+
+                var userAuthModel = new UserAuthModel
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Role = user.Role
+                };
+
+                return userAuthModel;
             }
-
-            var userAuthModel = new UserAuthModel
+            catch(InvalidUserException)
             {
-                Id = user.Id,
-                Username = user.Username,
-                Role = user.Role
-            };
-
-            return userAuthModel;
+                // UserResultModel - will be added later
+                return null;
+            } 
         }
     }
 }
