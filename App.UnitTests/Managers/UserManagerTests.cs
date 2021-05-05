@@ -217,5 +217,25 @@ namespace App.UnitTests.Managers
             await Assert.ThrowsAsync<InvalidUserException>(
                     async () => await userManager.RegisterUser(passedUser));
         }
+
+        [Fact]
+        public async Task CheckIfUsernameAvaible_RetursFalseANDIsUsernameAvaibleSetedToFalse_When_UsernameIsAlreadyUsed()
+        {
+            // Arrange
+            var userRepoMock = new Mock<IUserRepository>();
+
+            userRepoMock.Setup(x => x.GetByUsername(It.IsAny<string>()))
+                .ReturnsAsync(new User());
+
+            var userManager = new UserManager(userRepoMock.Object);
+
+            // Act
+            var result = await userManager.CheckIfUsernameAvaible("validUsername");
+            var isUsernameAvaible = userManager.IsUsernameAvaible;
+
+            // Assert
+            Assert.False(result);
+            Assert.False(isUsernameAvaible);
+        }
     }
 }

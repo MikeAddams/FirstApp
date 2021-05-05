@@ -56,7 +56,7 @@ namespace Managers
         {
             if (IsUsernameAvaible == null)
             {
-                IsUsernameAvaible = await CheckIfUsernameAvaible(user.Username);
+                await CheckIfUsernameAvaible(user.Username);
             }
 
             if (IsUsernameAvaible == false)
@@ -91,12 +91,13 @@ namespace Managers
 
             if (user != null)
             {
-                return false;
+                IsUsernameAvaible = false;
+                return (bool)IsUsernameAvaible;
             }
 
             IsUsernameAvaible = true;
 
-            return true;
+            return (bool)IsUsernameAvaible;
         }
 
 
