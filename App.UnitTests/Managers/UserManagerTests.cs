@@ -126,20 +126,28 @@ namespace App.UnitTests.Managers
         public async Task RegisterUser_CallsCheckIfUsernameAvaibleOnce_If_IsUsernameAvaibleEqualNull()
         {
             // Arrange
-            //var userRepoMock = new Mock<IUserRepository>();
-            //var userManagerMock = new Mock<UserManager>(userRepoMock);
-            //userManagerMock.Object.IsUsernameAvaible = false;
-            //var a = userManagerMock.Object;
-           // a.IsUsernameAvaible = false;
+            var userRepoMock = new Mock<IUserRepository>();
+            User notFoundUser = null;
+            var user = new User
+            {
+                Username = "validUsername",
+                FirstName = "ValidFN",
+                LastName = "ValidLN",
+                Nickname = "ValidNKM",
+                Email = "valid@mail.com",
+                Password = "validPass"
+            };
+
+            userRepoMock.Setup(x => x.GetByUsername(user.Username))
+                .ReturnsAsync(notFoundUser);
+
+            var userManager = new UserManager(userRepoMock.Object);
 
             // Act
-            //await userManagerMock.Object.RegisterUser(It.IsAny<User>());
-            //userManagerMock.Setup(x => x.CheckIfUsernameAvaible(It.IsAny<string>()))
-            //.ReturnsAsync(false);
-            
+            await userManager.RegisterUser(user);
 
             // Assert
-            //userManagerMock.Verify(async() => x.RegisterUser(It.IsAny<User>()), Times.Once);
+            userRepoMock.Verify(x => x.GetByUsername(user.Username), Times.Once);
         }
 
         [Theory]
