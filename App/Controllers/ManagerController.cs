@@ -13,12 +13,12 @@ namespace App.Controllers
     public class ManagerController : Controller
     {
         private readonly IProductService prodService;
-        private readonly IManagerService managerService;
+        private readonly IUserService userService;
 
-        public ManagerController(IProductService _prodService, IManagerService _managerService)
+        public ManagerController(IProductService _prodService, IUserService _userService)
         {
             prodService = _prodService;
-            managerService = _managerService;
+            userService = _userService;
         }
 
         [Authorize(Roles = "Manager,Administrator")]
@@ -91,9 +91,13 @@ namespace App.Controllers
 
         public async Task<IActionResult> BecomeManager()
         {
-            await managerService.ChangeRoleToManager(User.Identity.Name);
+            var result = await userService.ChangeRoleToManager(User.Identity.Name);
 
-            return RedirectToAction("Index", "Manager");
+            TempData["userStatus"] = result.Message;
+            TempData["userStatusMessage"] = result.Message;
+
+            // need to reAuthentificate somehow
+            return RedirectToAction("Profile", "Account");
         }
 
         [HttpPost]

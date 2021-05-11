@@ -10,5 +10,6 @@ namespace Managers.Interfaces
         public Task<User> CheckUserCredentials(User passedUser);
         public Task<bool> CheckIfUsernameAvaible(string username);
         public Task<int> RegisterUser(User user);
+        public Task<User> ChangeUserRole(User user, RoleType role);
     }
 }

@@ -100,6 +100,24 @@ namespace Managers
             return (bool)IsUsernameAvaible;
         }
 
+        public async Task<User> ChangeUserRole(User user, RoleType role)
+        {
+            if (user == null)
+                throw new InvalidUserException("there's no user");
+
+            if (role == RoleType.Administrator)
+                throw new UserRoleException("you have no rights");
+
+            if (user.Role == role)
+                throw new UserRoleException("roles already match each other");
+
+            user.Role = RoleType.Manager;
+
+            userRepo.Update(user);
+            await userRepo.Commit();
+
+            return user;
+        }
 
         private static string HashPassword(string password, string algorithm = "sha256")
         {

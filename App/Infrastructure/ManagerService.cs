@@ -8,18 +8,12 @@ namespace App.Infrastructure
 {
     public class ManagerService : IManagerService
     {
-        private readonly IManagerRoleManger manager;
+        private readonly IUserManager userMnager;
 
-        public ManagerService(IManagerRoleManger _manager)
+        public ManagerService(IUserManager _userMnager)
         {
-            manager = _manager;
+            userMnager = _userMnager;
         }
 
-        public async Task<bool> ChangeRoleToManager(string username)
-        {
-            await manager.ChangeRoleToManager(username);
-
-            return true;
-        }
     }
 }

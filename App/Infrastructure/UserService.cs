@@ -96,5 +96,24 @@ namespace App.Infrastructure
                 return null;
             } 
         }
+
+        public async Task<UserResultModel> ChangeRoleToManager(string username)
+        {
+            try
+            {
+                var user = await userManager.GetByUsername(username);
+                await userManager.ChangeUserRole(user, RoleType.Manager);
+            }
+            catch(InvalidUserException ex)
+            {
+                return new UserResultModel { IsSuccessful = false, Message = ex.Message };
+            }
+            catch (UserRoleException ex)
+            {
+                return new UserResultModel { IsSuccessful = false, Message = ex.Message };
+            }
+
+            return new UserResultModel { IsSuccessful = true, Message = "Role changed successfully" };
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using App.Models;
+using Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace App.Infrastructure.Interfaces
         public Task<UserCredentialsModel> GetUserDetails(string username);
         public Task<UserAuthModel> ValidateUser(LoginModel userModel);
         public Task<UserAuthModel> RegisterUser(RegisterModel userModel);
+        public Task<UserResultModel> ChangeRoleToManager(string username);
     }
 }

@@ -9,6 +9,6 @@ namespace App.Infrastructure.Interfaces
 {
     public interface IManagerService
     {
-        public Task<bool> ChangeRoleToManager(string username);
+
     }
 }

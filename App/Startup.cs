@@ -46,7 +46,6 @@ namespace App
             services.AddScoped<ICategoryService, CategoryService>();
 
             services.AddScoped<IUserManager, UserManager>();
-            services.AddScoped<IManagerRoleManger, ManagerRoleManager>();
             services.AddScoped<IProductManager, ProductManager>();
             services.AddScoped<IFileManager, FileManager>();
             services.AddScoped<IImageManager, ImageManager>();
