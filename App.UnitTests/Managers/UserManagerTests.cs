@@ -245,5 +245,39 @@ namespace App.UnitTests.Managers
             Assert.False(result);
             Assert.False(isUsernameAvaible);
         }
+
+        [Fact]
+        public async Task ChangeUserRole_ThrowsUserRoleExceptionAndInvalidUserException_If_DoesNotPassValidation()
+        {
+            // Arrange
+            var userRepoMock = new Mock<IUserRepository>();
+            var userManager = new UserManager(userRepoMock.Object);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidUserException>(
+                async () => await userManager.ChangeUserRole(null, RoleType.Client));
+            await Assert.ThrowsAsync<UserRoleException>(
+                async () => await userManager.ChangeUserRole(new User(), RoleType.Administrator));
+        }
+
+        [Fact]
+        public async Task ChangeUserRole_CallsUpdateOnce_If_PassesValidation()
+        {
+            // Arrange
+            var userRepoMock = new Mock<IUserRepository>();
+            var expectedUser = new User() { Role = RoleType.Client };
+
+            userRepoMock.Setup(x => x.Update(expectedUser))
+                .Returns(expectedUser);
+
+            var userManager = new UserManager(userRepoMock.Object);
+
+            // Act
+            await userManager.ChangeUserRole(
+                expectedUser, RoleType.Manager);
+
+            // Assert
+            userRepoMock.Verify(x => x.Update(It.IsAny<User>()), Times.Once);
+        }
     }
 }

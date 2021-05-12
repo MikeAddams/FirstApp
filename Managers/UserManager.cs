@@ -100,7 +100,7 @@ namespace Managers
             return (bool)IsUsernameAvaible;
         }
 
-        public async Task<User> ChangeUserRole(User user, RoleType role)
+        public async Task ChangeUserRole(User user, RoleType role)
         {
             if (user == null)
                 throw new InvalidUserException("there's no user");
@@ -111,12 +111,10 @@ namespace Managers
             if (user.Role == role)
                 throw new UserRoleException("roles already match each other");
 
-            user.Role = RoleType.Manager;
+            user.Role = role;
 
             userRepo.Update(user);
             await userRepo.Commit();
-
-            return user;
         }
 
         private static string HashPassword(string password, string algorithm = "sha256")
