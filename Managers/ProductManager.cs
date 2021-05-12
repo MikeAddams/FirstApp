@@ -12,12 +12,10 @@ namespace Managers
     public class ProductManager : IProductManager
     {
         private readonly IProductRepository prodRepo;
-        private readonly IImageRepository imgRepo;
 
-        public ProductManager(IProductRepository _prodRepo, IImageRepository _imgRepo)
+        public ProductManager(IProductRepository _prodRepo)
         {
             prodRepo = _prodRepo;
-            imgRepo = _imgRepo;
         }
 
         public async Task<Product> GetProductById(int productId)
@@ -29,17 +27,19 @@ namespace Managers
         {
             var product = await prodRepo.GetById(productId);
 
-            if (product == null || product.ManagerId != managerId)
-            {
-                return null;
-            }
+            if (product == null)
+                throw new ProductException("Not Found");
+
+            if (product.ManagerId != managerId)
+                throw new PermissionException("Not Allowed");
 
             return product;
         }
 
         public async Task AddNewProduct(Product prod, RoleType role)
         {
-            if (role == RoleType.Client) throw new PermissionException("Adding Product");
+            if (role == RoleType.Client) 
+                throw new PermissionException("Not Allowed");
 
             await prodRepo.Add(prod);
             await prodRepo.Commit();
