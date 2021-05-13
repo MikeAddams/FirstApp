@@ -41,6 +41,12 @@ namespace Managers
             if (role == RoleType.Client) 
                 throw new PermissionException("Not Allowed");
 
+            if (prod.Name.Length > 55 || prod.Name.Length < 5)
+                throw new ProductException("Name lenght does not correspond");
+
+            if (prod.Details.Length > 355)
+                throw new ProductException("Details lenght does not correspond");
+
             await prodRepo.Add(prod);
             await prodRepo.Commit();
         }

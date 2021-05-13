@@ -58,5 +58,24 @@ namespace App.UnitTests.Managers
             await Assert.ThrowsAsync<PermissionException>(async () =>
                 await prodManager.AddNewProduct(It.IsAny<Product>(), RoleType.Client));
         }
+
+        [Fact]
+        public async Task AddNewProduct_CallsAdd_If_PassesValidation()
+        {
+            // Arrange
+            var prodRepoMock = new Mock<IProductRepository>();
+            var prodManager = new ProductManager(prodRepoMock.Object);
+            var product = new Product
+            {
+                Name = "Product",
+                Details = "Product detials"
+            };
+
+            // Act
+            await prodManager.AddNewProduct(product, RoleType.Manager);
+
+            // Assert
+            prodRepoMock.Verify(x => x.Add(It.IsAny<Product>()), Times.Once);
+        }
     }
 }
