@@ -53,9 +53,6 @@ namespace Managers
 
         public async Task DeleteProduct(int productId)
         {
-            //var prodDetails = await prodRepo.GetById(productId);
-            //var a = prodDetails.
-
             await prodRepo.Delete(productId);
             await prodRepo.Commit();
         }

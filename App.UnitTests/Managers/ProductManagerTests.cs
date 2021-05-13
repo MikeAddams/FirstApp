@@ -76,6 +76,22 @@ namespace App.UnitTests.Managers
 
             // Assert
             prodRepoMock.Verify(x => x.Add(It.IsAny<Product>()), Times.Once);
+            prodRepoMock.Verify(x => x.Commit(), Times.Once);
+        }
+
+        [Fact]
+        public async Task DeleteProduct()
+        {
+            // Arrange
+            var prodRepoMock = new Mock<IProductRepository>();
+            var prodManager = new ProductManager(prodRepoMock.Object);
+
+            // Act
+            await prodManager.DeleteProduct(It.IsAny<int>());
+
+            // Assert
+            prodRepoMock.Verify(x => x.Delete(It.IsAny<int>()), Times.Once);
+            prodRepoMock.Verify(x => x.Commit(), Times.Once);
         }
     }
 }
