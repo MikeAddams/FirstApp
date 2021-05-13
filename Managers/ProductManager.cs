@@ -41,7 +41,7 @@ namespace Managers
             if (role == RoleType.Client) 
                 throw new PermissionException("Not Allowed");
 
-            if (prod.Name.Length > 55 || prod.Name.Length < 5)
+            if (prod.Name.Length > 25 || prod.Name.Length < 5)
                 throw new ProductException("Name lenght does not correspond");
 
             if (prod.Details.Length > 355)
@@ -59,7 +59,14 @@ namespace Managers
 
         public async Task UpdateProduct(Product updatedProduct, int managerId)
         {
-            if (updatedProduct.ManagerId != managerId) throw new PermissionException("Updating Product");
+            if (updatedProduct.ManagerId != managerId) 
+                throw new PermissionException("Not Allowed");
+
+            if (updatedProduct.Name.Length > 25 || updatedProduct.Name.Length < 5)
+                throw new ProductException("Name lenght does not correspond");
+
+            if (updatedProduct.Details.Length > 355)
+                throw new ProductException("Details lenght does not correspond");
 
             prodRepo.Update(updatedProduct);
             await prodRepo.Commit();
