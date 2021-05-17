@@ -34,7 +34,12 @@ namespace Managers
 
         public async Task<User> GetByUserId(int userId)
         {
-            return await userRepo.GetById(userId);
+            var user = await userRepo.GetById(userId);
+
+            if (user == null)
+                throw new InvalidUserException("user does not exist");
+
+            return user;
         }
 
         public async Task<User> CheckUserCredentials(User passedUser)

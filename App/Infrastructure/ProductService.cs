@@ -55,6 +55,18 @@ namespace Services
             {
                 return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
             }
+            catch (InvalidUserException ex)
+            {
+                return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
+            }
+            catch (PermissionException ex)
+            {
+                return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
+            }
+            catch (ProductException ex)
+            {
+                return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
+            }
 
             return new ProductCRUDResultModel { IsSuccessful = true, Message = "Product saved succesfully!" };
         }
