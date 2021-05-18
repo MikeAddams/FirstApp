@@ -85,7 +85,7 @@ namespace Services
 
                 fileManager.RemoveFiles(fileNames);
             }
-            catch (InvalidImageException ex)
+            catch (ProductException ex)
             {
                 return new ProductCRUDResultModel { IsSuccessful = false, Message = ex.Message };
             }

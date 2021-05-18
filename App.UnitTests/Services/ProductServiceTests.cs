@@ -192,5 +192,78 @@ namespace App.UnitTests.Services
             // Act
             prodManager.Verify(x => x.AddNewProduct(It.IsAny<Product>(), It.IsAny<RoleType>()), Times.Once);
         }
+
+        [Fact]
+        public async Task DeleteProduct_ReturnsProductCRUDResultModelIsSuccessfulTrue_IfNoExceptionsCatched()
+        {
+            // Arrange
+            var product = new Product
+            {
+                ThumbNail = new Mock<Image>().Object
+            };
+
+            var prodManager = new Mock<IProductManager>();
+            prodManager.Setup(x => x.GetProductById(It.IsAny<int>()))
+                .ReturnsAsync(product);
+
+            var productService = new ProductServiceBuilder()
+                .WithProductManager(prodManager.Object)
+                .Build();
+
+            // Act
+            var result = await productService.DeleteProduct(1);
+
+            // Assert
+            Assert.True(result.IsSuccessful);
+        }
+
+        [Fact]
+        public async Task DeleteProduct_ReturnsProductCRUDResultModelIsSuccessfulFalse_On_ProductException()
+        {
+            // Arrange
+            var expectedException = new ProductException("msg");
+
+            var prodManager = new Mock<IProductManager>();
+            prodManager.Setup(x => x.GetProductById(It.IsAny<int>()))
+                .ThrowsAsync(expectedException);
+
+            var productService = new ProductServiceBuilder()
+                .WithProductManager(prodManager.Object)
+                .Build();
+
+            // Act
+            var result = await productService.DeleteProduct(1);
+
+            // Assert
+            Assert.False(result.IsSuccessful);
+            Assert.Contains(expectedException.Message, result.Message);
+        }
+
+        [Fact]
+        public async Task DeleteProduct_CallsFileManagerRemoveFilesOnce()
+        {
+            // Arrange
+            var product = new Product
+            {
+                ThumbNail = new Mock<Image>().Object
+            };
+
+            var prodManager = new Mock<IProductManager>();
+            prodManager.Setup(x => x.GetProductById(It.IsAny<int>()))
+                .ReturnsAsync(product);
+
+            var fileManager = new Mock<IFileManager>();
+
+            var productService = new ProductServiceBuilder()
+                .WithProductManager(prodManager.Object)
+                .WithFileManager(fileManager.Object)
+                .Build();
+
+            // Act
+            var result = await productService.DeleteProduct(1);
+
+            // Assert
+            fileManager.Verify(x => x.RemoveFiles(It.IsAny<List<string>>()), Times.Once);
+        }
     }
 }

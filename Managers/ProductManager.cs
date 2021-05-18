@@ -20,7 +20,12 @@ namespace Managers
 
         public async Task<Product> GetProductById(int productId)
         {
-            return await prodRepo.GetById(productId);
+            var product = await prodRepo.GetById(productId);
+
+            if (product == null)
+                throw new ProductException("Not Found");
+
+            return product;
         }
 
         public async Task<Product> GetProduct(int productId, int managerId)
