@@ -113,28 +113,36 @@ namespace Services
             return prodModel;
         }
 
-        public async Task<ProductDetailsModel> GetProductById(int productId)
+        public async Task<ProductCRUDResultModel> GetProductById(int productId)
         {
-            Product prodEntity = await prodManager.GetProductById(productId);
+            var productResult = new ProductCRUDResultModel();
 
-            if (prodEntity == null)
+            try
             {
-                return null;
-            }
+                Product prodEntity = await prodManager.GetProductById(productId);
 
-            var prodModel = new ProductDetailsModel
-            {
-                Titile = prodEntity.Name,
-                Description = prodEntity.Details,
-                Price = prodEntity.Price,
-                Image = new Image
+                var prodModel = new ProductDetailsModel
                 {
-                    ThumbNailPath = "",
-                    FullSizePath = Path.Combine("\\media\\product", prodEntity.ThumbNail.FullSizePath),
-                }
-            };
+                    Titile = prodEntity.Name,
+                    Description = prodEntity.Details,
+                    Price = prodEntity.Price,
+                    Image = new Image
+                    {
+                        ThumbNailPath = "",
+                        FullSizePath = Path.Combine("\\media\\product", prodEntity.ThumbNail.FullSizePath),
+                    }
+                };
 
-            return prodModel;
+                productResult.IsSuccessful = true;
+                productResult.ProductDetails = prodModel;
+            }
+            catch (ProductException ex)
+            {
+                productResult.IsSuccessful = false;
+                productResult.Message = ex.Message;
+            }   
+
+            return productResult;
         }
 
         public async Task<ProductDetailsModel> GetProduct(int productId, int managerId)

@@ -21,15 +21,15 @@ namespace App.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var product = await prodService.GetProductById(id);
+            var productResult = await prodService.GetProductById(id);
 
-            if (product == null)
+            if (productResult.IsSuccessful == false)
             {
                 Response.StatusCode = 404;
                 return RedirectToAction("NotFound", "Home");
             }
 
-            return View(product);
+            return View(productResult.ProductDetails);
         }
     }
 }

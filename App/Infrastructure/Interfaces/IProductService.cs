@@ -6,7 +6,7 @@ namespace Services.Interfaces
 {
     public interface IProductService
     {
-        public Task<ProductDetailsModel> GetProductById(int productId);
+        public Task<ProductCRUDResultModel> GetProductById(int productId);
         public Task<ProductDetailsModel> GetProduct(int productId, int managerId);
         public List<ProductShowcaseModel> GetLastProducts(int count);
         public Task<ProductCRUDResultModel> AddProduct(AddProductModel product, int managerId);

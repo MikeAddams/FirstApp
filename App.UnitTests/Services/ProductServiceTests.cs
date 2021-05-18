@@ -265,5 +265,61 @@ namespace App.UnitTests.Services
             // Assert
             fileManager.Verify(x => x.RemoveFiles(It.IsAny<List<string>>()), Times.Once);
         }
+
+        [Fact]
+        public async Task GetProductById_ReturnsIsSuccessfulEqualTrueAndModel_If_NoExceptions()
+        {
+            // Arrange
+            var expectedProduct = new Product
+            {
+                Name = "title",
+                Details = "details",
+                Price = 11,
+                ThumbNail = new Image
+                {
+                    FullSizePath = "image",
+                }
+            };
+
+            var prodManager = new Mock<IProductManager>();
+            prodManager.Setup(x => x.GetProductById(It.IsAny<int>()))
+                .ReturnsAsync(expectedProduct);
+
+            var productService = new ProductServiceBuilder()
+                .WithProductManager(prodManager.Object)
+                .Build();
+
+            // Act
+            var result = await productService.GetProductById(1);
+
+            // Assert
+            Assert.True(result.IsSuccessful);
+            Assert.Equal(result.ProductDetails.Titile, expectedProduct.Name);
+            Assert.Equal(result.ProductDetails.Description, expectedProduct.Details);
+            Assert.Equal(result.ProductDetails.Price, expectedProduct.Price);
+            Assert.Contains(expectedProduct.ThumbNail.FullSizePath, result.ProductDetails.Image.FullSizePath);
+        }
+
+        [Fact]
+        public async Task GetProductById_ReturnsIsSuccessfulEqualFalse_If_CatchedException()
+        {
+            // Arrange
+            var expectedException = new ProductException("msg");
+
+            var prodManager = new Mock<IProductManager>();
+            prodManager.Setup(x => x.GetProductById(It.IsAny<int>()))
+                .ThrowsAsync(expectedException);
+
+            var productService = new ProductServiceBuilder()
+                .WithProductManager(prodManager.Object)
+                .Build();
+
+            // Act
+            var result = await productService.GetProductById(1);
+
+            // Assert
+            Assert.False(result.IsSuccessful);
+            Assert.Contains(expectedException.Message, result.Message);
+        }
     }
 }
