@@ -145,28 +145,39 @@ namespace Services
             return productResult;
         }
 
-        public async Task<ProductDetailsModel> GetProduct(int productId, int managerId)
+        public async Task<ProductCRUDResultModel> GetProduct(int productId, int managerId)
         {
-            Product prodEntity = await prodManager.GetProduct(productId, managerId);
+            var productResult = new ProductCRUDResultModel();
 
-            if (prodEntity == null)
+            try
             {
-                return null;
+                Product prodEntity = await prodManager.GetProduct(productId, managerId);
+
+                var prodModel = new ProductDetailsModel
+                {
+                    Titile = prodEntity.Name,
+                    Description = prodEntity.Details,
+                    Price = prodEntity.Price,
+                    Image = new Image
+                    {
+                        ThumbNailPath = "",
+                        FullSizePath = Path.Combine("\\media\\product", prodEntity.ThumbNail.FullSizePath),
+                    }
+                };
+
+                productResult.IsSuccessful = true;
+                productResult.ProductDetails = prodModel;
+            }
+            catch (ProductException ex)
+            {
+                productResult.Message = ex.Message;
+            }
+            catch (PermissionException ex)
+            {
+                productResult.Message = ex.Message;
             }
 
-            var prodModel = new ProductDetailsModel
-            {
-                Titile = prodEntity.Name,
-                Description = prodEntity.Details,
-                Price = prodEntity.Price,
-                Image = new Image
-                {
-                    ThumbNailPath = "",
-                    FullSizePath = Path.Combine("\\media\\product", prodEntity.ThumbNail.FullSizePath),
-                }
-            };
-
-            return prodModel;
+            return productResult;
         }
 
         public ManagerProductsModel GetManagerProducts(int id)

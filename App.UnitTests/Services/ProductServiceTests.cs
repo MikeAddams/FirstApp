@@ -321,5 +321,83 @@ namespace App.UnitTests.Services
             Assert.False(result.IsSuccessful);
             Assert.Contains(expectedException.Message, result.Message);
         }
+
+        [Fact]
+        public async Task GetProduct_ReturnsIsSuccessfulEqualTrueAndModel_If_NoExceptions()
+        {
+            // Arrange
+            var expectedProduct = new Product
+            {
+                Name = "title",
+                Details = "details",
+                Price = 11,
+                ThumbNail = new Image
+                {
+                    FullSizePath = "image",
+                }
+            };
+
+            var prodManager = new Mock<IProductManager>();
+            prodManager.Setup(x => x.GetProduct(It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(expectedProduct);
+
+            var productService = new ProductServiceBuilder()
+                .WithProductManager(prodManager.Object)
+                .Build();
+
+            // Act
+            var result = await productService.GetProduct(1, 1);
+
+            // Assert
+            Assert.True(result.IsSuccessful);
+            Assert.Equal(result.ProductDetails.Titile, expectedProduct.Name);
+            Assert.Equal(result.ProductDetails.Description, expectedProduct.Details);
+            Assert.Equal(result.ProductDetails.Price, expectedProduct.Price);
+            Assert.Contains(expectedProduct.ThumbNail.FullSizePath, result.ProductDetails.Image.FullSizePath);
+        }
+
+        [Fact]
+        public async Task GetProduct_ReturnsIsSuccessfulEqualFalse_If_CatchedProductException()
+        {
+            // Arrange
+            var expectedException = new ProductException("msg");
+
+            var prodManager = new Mock<IProductManager>();
+            prodManager.Setup(x => x.GetProduct(It.IsAny<int>(), It.IsAny<int>()))
+                .ThrowsAsync(expectedException);
+
+            var productService = new ProductServiceBuilder()
+                .WithProductManager(prodManager.Object)
+                .Build();
+
+            // Act
+            var result = await productService.GetProduct(1, 1);
+
+            // Assert
+            Assert.False(result.IsSuccessful);
+            Assert.Contains(expectedException.Message, result.Message);
+        }
+
+        [Fact]
+        public async Task GetProduct_ReturnsIsSuccessfulEqualFalse_If_CatchedPermissionException()
+        {
+            // Arrange
+            var expectedException = new PermissionException("msg");
+
+            var prodManager = new Mock<IProductManager>();
+            prodManager.Setup(x => x.GetProduct(It.IsAny<int>(), It.IsAny<int>()))
+                .ThrowsAsync(expectedException);
+
+            var productService = new ProductServiceBuilder()
+                .WithProductManager(prodManager.Object)
+                .Build();
+
+            // Act
+            var result = await productService.GetProduct(1, 1);
+
+            // Assert
+            Assert.False(result.IsSuccessful);
+            Assert.Contains(expectedException.Message, result.Message);
+        }
     }
 }
