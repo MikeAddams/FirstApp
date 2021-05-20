@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -398,6 +399,48 @@ namespace App.UnitTests.Services
             // Assert
             Assert.False(result.IsSuccessful);
             Assert.Contains(expectedException.Message, result.Message);
+        }
+
+        [Fact]
+        public void GetManagerProducts_ReturnsManagerProductsModel_WithOneFilledProduct()
+        {
+            // Arrange
+            var expectedProduct = new Product()
+            {
+                Id = 1,
+                Name = "title",
+                Price = 13,
+                ThumbNail = new Image
+                {
+                    ThumbNailPath = "path"
+                }
+            };
+
+            var productList = new List<Product>()
+            {
+                expectedProduct
+            };
+
+            var prodManager = new Mock<IProductManager>();
+            prodManager.Setup(x => x.GetProductsByManagerId(It.IsAny<int>()))
+                .Returns(productList);
+
+            // GetProductsByManagerId
+            var productService = new ProductServiceBuilder()
+                .WithProductManager(prodManager.Object)
+                .Build();
+
+            // Act
+            var result = productService.GetManagerProducts(1);
+
+            // Assert
+            var returnedProd = result.ShowcaseProducts.First();
+            Assert.Equal(expectedProduct.Id, returnedProd.Id);
+            Assert.Equal(expectedProduct.Name, returnedProd.Title);
+            Assert.Equal(expectedProduct.Price, returnedProd.Price);
+            Assert.Contains(expectedProduct.ThumbNail.ThumbNailPath, returnedProd.ThumbNailPath);
+
+            Assert.Equal(-1, result.DeleteProductId);
         }
     }
 }
