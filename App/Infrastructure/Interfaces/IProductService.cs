@@ -12,7 +12,7 @@ namespace Services.Interfaces
         public Task<ProductCRUDResultModel> AddProduct(AddProductModel product, int managerId);
         public ManagerProductsModel GetManagerProducts(int id);
         public Task<ProductCRUDResultModel> DeleteProduct(int productId);
-        public Task<EditProductModel> GetEditProductModel(int productId, int userId);
+        public Task<ProductCRUDResultModel> GetEditProductModel(int productId, int userId);
         public Task<ProductCRUDResultModel> UpdateProduct(EditProductModel updatedProd, int managerId);
         public List<ProductShowcaseModel> GetProductsByCategoriesId(List<int> catIds);
     }

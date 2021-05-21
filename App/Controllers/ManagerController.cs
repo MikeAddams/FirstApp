@@ -44,15 +44,15 @@ namespace App.Controllers
         {
             int userId = int.Parse(User.FindFirstValue("Id"));
 
-            EditProductModel prodModel = await prodService.GetEditProductModel(id, userId);
+            var prodResult = await prodService.GetEditProductModel(id, userId);
 
-            if (prodModel == null)
+            if (prodResult.IsSuccessful == false)
             {
                 Response.StatusCode = 404;
                 return RedirectToAction("NotFound", "Home");
             }
 
-            return View(prodModel);
+            return View(prodResult.EditProductDetails);
         }
 
         [HttpPost]

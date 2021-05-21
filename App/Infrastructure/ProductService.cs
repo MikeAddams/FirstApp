@@ -206,30 +206,41 @@ namespace Services
             return managerProdModel;
         }
 
-        public async Task<EditProductModel> GetEditProductModel(int productId, int userId)
+        public async Task<ProductCRUDResultModel> GetEditProductModel(int productId, int userId)
         {
-            Product prodEntity = await prodManager.GetProduct(productId, userId);
+            var productResult = new ProductCRUDResultModel();
 
-            if (prodEntity == null)
+            try
             {
-                return null;
+                Product prodEntity = await prodManager.GetProduct(productId, userId);
+
+                var editProdModel = new EditProductModel
+                {
+                    Title = prodEntity.Name,
+                    Description = prodEntity.Details,
+                    Price = prodEntity.Price,
+
+                    CurrentImage = new Image
+                    {
+                        Id = prodEntity.ThumbNail.Id,
+                        ThumbNailPath = Path.Combine("\\media\\product", prodEntity.ThumbNail.ThumbNailPath),
+                        FullSizePath = Path.Combine("\\media\\product", prodEntity.ThumbNail.FullSizePath),
+                    }
+                };
+
+                productResult.EditProductDetails = editProdModel;
+                productResult.IsSuccessful = true;
+            }
+            catch (ProductException ex)
+            {
+                productResult.Message = ex.Message;
+            }
+            catch (PermissionException ex)
+            {
+                productResult.Message = ex.Message;
             }
 
-            var editProdModel = new EditProductModel
-            {
-                Title = prodEntity.Name,
-                Description = prodEntity.Details,
-                Price = prodEntity.Price,
-
-                CurrentImage = new Image
-                {
-                    Id = prodEntity.ThumbNail.Id,
-                    ThumbNailPath = Path.Combine("\\media\\product", prodEntity.ThumbNail.ThumbNailPath),
-                    FullSizePath = Path.Combine("\\media\\product", prodEntity.ThumbNail.FullSizePath),
-                }
-            };
-
-            return editProdModel;
+            return productResult;
         }
 
         public async Task<ProductCRUDResultModel> UpdateProduct(EditProductModel updatedProd, int managerId)

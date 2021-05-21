@@ -6,5 +6,6 @@
         public string Message { get; set; }
 
         public ProductDetailsModel ProductDetails { get; set; }
+        public EditProductModel EditProductDetails { get; set; }
     }
 }
